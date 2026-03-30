@@ -1,0 +1,20 @@
+
+> shilbil-portfolio-c1@0.1.0 lint
+> eslint
+
+
+D:\shilbil-portfolio-c1\src\components\layout\Navbar.tsx
+  2:10  warning  'cn' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\shilbil-portfolio-c1\src\components\sections\Contact.tsx
+   4:26   warning  'Globe' is defined but never used                                @typescript-eslint/no-unused-vars
+   5:8    warning  'Link' is defined but never used                                 @typescript-eslint/no-unused-vars
+  32:83   error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  34:101  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  85:47   error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+D:\shilbil-portfolio-c1\src\components\sections\Services.tsx
+  44:18  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+Γ£û 7 problems (4 errors, 3 warnings)
+
