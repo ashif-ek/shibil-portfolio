@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import WhatsAppButton from "@/components/common/WhatsAppButton";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import JsonLd from "@/components/seo/JsonLd";
 import { Person, WithContext } from "schema-dts";
@@ -71,6 +72,7 @@ export default function RootLayout({
       <body className={`${inter.variable} font-sans antialiased bg-black text-white`}>
         <Navbar />
         {children}
+        <WhatsAppButton />
         <Footer />
         <GoogleAnalytics gaId="G-XXXXXXX" />
       </body>
