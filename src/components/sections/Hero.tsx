@@ -70,15 +70,6 @@ export default function Hero() {
             <Phone className="w-5 h-5" />
           </a>
           <a
-            href="https://wa.me/918590658417"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#25D366] text-white font-semibold rounded-lg hover:bg-[#1fae53] transition-colors"
-          >
-            WhatsApp Chat
-            <MessageCircle className="w-5 h-5" />
-          </a>
-          <a
             href="/SHIBIL resume.pdf"
             download
             className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border border-gray-700 text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors"

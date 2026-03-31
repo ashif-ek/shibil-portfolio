@@ -1,38 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shibil S | Digital Marketing Strategist & SEO Expert
 
-## Getting Started
+Professional portfolio of **Shibil S**, a results-driven Digital Marketing Executive specializing in SEO, SEM, SMM, and E-commerce growth.
 
-First, run the development server:
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
+![Next.js](https://img.shields.io/badge/Next.js-16.2.1-black)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4.0-38bdf8)
+![Drizzle ORM](https://img.shields.io/badge/Drizzle_ORM-Latest-C5F74F)
+
+## 🚀 Key Features
+
+- **Dynamic Project Showcase**: A specialized CMS for managing and displaying marketing case studies and portfolio projects.
+- **High-Performance Architecture**: Built with Next.js 16 (App Router) for lightning-fast page loads and optimal Core Web Vitals.
+- **Secure Admin Panel**: A protected backend for updating content, experience, and projects in real-time.
+- **SEO Optimized**: Advanced JSON-LD schema implementation, meta-tag management, and semantic HTML for maximum search visibility.
+- **Responsive Design**: Premium dark-themed aesthetic using Tailwind CSS 4 and Framer Motion for smooth, high-end interactions.
+- **Direct Engagement**: Integrated WhatsApp floating contact, direct call functionality, and downloadable CV.
+
+## 🛠️ Technology Stack
+
+| Layer | Technology |
+| --- | --- |
+| **Framework** | Next.js 16 (App Router) |
+| **Styling** | Tailwind CSS 4, Framer Motion |
+| **Database** | Neon PostgreSQL (Serverless) |
+| **ORM** | Drizzle ORM |
+| **Validation** | Zod |
+| **Icons** | Lucide React |
+| **Analytics** | Google Analytics 4 |
+
+## 📦 Project Structure
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+├── app/                  # Next.js App Router (Admin, Projects, Home)
+├── components/           # Reusable UI components
+│   ├── common/           # Shared components (e.g., WhatsApp button)
+│   ├── layout/           # Global layouts (Navbar, Footer)
+│   ├── sections/         # Page sections (Hero, About, Experience)
+│   └── seo/              # JSON-LD and SEO components
+├── lib/                  # Database config, schemas, and utilities
+├── actions/              # Server Actions for CRUD operations
+└── public/               # Static assets (images, PDFs)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Getting Started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/ashif-ek/shibil-portfolio.git
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-## Learn More
+3. **Environment Setup**
+   Create a `.env.local` file:
+   ```env
+   DATABASE_URL="your-postgresql-url"
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. **Database Sync**
+   ```bash
+   npx drizzle-kit push
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. **Run the development server**
+   ```bash
+   npm run dev
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📈 SEO Performance
 
-## Deploy on Vercel
+This portfolio is engineered for high-intent search visibility, targeting technical and marketing-focused keywords in the Kerala region and beyond.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Semantic Heading Hierarchy**
+- **Image Optimization (Next/Image)**
+- **Meta Description & OG Tag Management**
+- **Person & Breadcrumb JSON-LD Schemas**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
 
-# shibil-portfolio
+## 🤝 Contact
+
+- **Email**: sshibil14954@gmail.com
+- **LinkedIn**: [linkedin.com/in/shibil-s-433000370](https://linkedin.com/in/shibil-s-433000370)
+- **WhatsApp**: [+91 8590658417](https://wa.me/918590658417)
