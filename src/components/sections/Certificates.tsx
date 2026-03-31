@@ -5,32 +5,32 @@ import { Award, ExternalLink, ShieldCheck, GraduationCap } from "lucide-react";
 
 const certificates = [
   {
-    title: "Google Ads Search Certification",
-    issuer: "Google Digital Academy (Skillshop)",
-    date: "2024",
+    title: "Diploma in Digital Marketing",
+    issuer: "Westberg International Institute",
+    date: "Aug - Oct 2025",
     link: "#",
-    icon: <ShieldCheck className="w-8 h-8 text-yellow-500" />
+    icon: <ShieldCheck className="w-8 h-8 text-blue-500" />
   },
   {
-    title: "Meta Certified Digital Marketing Associate",
-    issuer: "Meta Blueprint",
-    date: "2024",
-    link: "#",
-    icon: <Award className="w-8 h-8 text-blue-500" />
-  },
-  {
-    title: "HubSpot SEO Certification",
-    issuer: "HubSpot Academy",
-    date: "2023",
-    link: "#",
-    icon: <ShieldCheck className="w-8 h-8 text-orange-500" />
-  },
-  {
-    title: "Bachelor of Commerce (B.Com)",
-    issuer: "GHSS MOOTHEDAM",
-    date: "Graduated",
+    title: "Higher Secondary (Maths Commerce)",
+    issuer: "GHSS Moothedam",
+    date: "Completed",
     link: "#",
     icon: <GraduationCap className="w-8 h-8 text-purple-500" />
+  },
+  {
+    title: "Google Ads Search Certification",
+    issuer: "Google Digital Academy",
+    date: "Verified",
+    link: "#",
+    icon: <Award className="w-8 h-8 text-yellow-500" />
+  },
+  {
+    title: "Meta Certified Associate",
+    issuer: "Meta Blueprint",
+    date: "Verified",
+    link: "#",
+    icon: <Award className="w-8 h-8 text-indigo-500" />
   }
 ];
 

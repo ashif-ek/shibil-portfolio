@@ -22,14 +22,18 @@ export default function About() {
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-6">About Me</h2>
             <div className="space-y-6 text-gray-400 text-lg leading-relaxed">
               <p>
-                I am a performance-driven Digital Marketing Specialist based in Kerala, India. My journey into digital marketing was built on a simple premise: helping local brands and e-commerce stores scale predictability through data-backed decisions.
+                As a Digital Marketing Executive with a background in SEO, SEM, and SMM, I specialize in creating data-driven campaigns that provide measurable results. My expertise lies in helping brands enhance their online visibility and ROI through research-backed strategies.
               </p>
               <p>
-                Currently serving as a Digital Marketing Executive at Airin Industrial Corporation, I handle everything from Meta Ads strategy to technical SEO and content creation. I don’t just run campaigns; I build holistic conversion systems.
+                From coordinating complex SEO strategies to executing targeted Meta and Google Ads, my focus is always on continuous improvement and staying updated with the latest digital trends. I build user-friendly websites that aren't just visually appealing but optimized for real-world conversions.
               </p>
               <p>
-                When you work with me, you aren't just getting an ad operator. You are getting a dedicated growth partner who understands business economics, profitability, and what it takes to dominate online markets.
+                Currently, I leverage tools like Google Analytics and keyword analysis to help businesses in Kerala and beyond grow their digital footprint. When I'm not optimizing campaigns, I'm exploring new ways to bridge the gap between business goals and user needs.
               </p>
+              <div className="pt-4 flex flex-col gap-3 font-mono text-sm uppercase tracking-wider text-blue-400">
+                <p>📍 Malappuram, Kerala, India</p>
+                <p>🎓 Diploma in Digital Marketing, Westberg International</p>
+              </div>
             </div>
           </motion.div>
 

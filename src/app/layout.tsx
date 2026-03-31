@@ -14,10 +14,10 @@ const baseUrl = process.env.NODE_ENV === "production" ? "https://shibill.in" : "
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "Shibil S | Expert Digital Marketing & Meta Ads Strategist",
+    default: "Shibil S | Digital Marketing Executive & SEO Specialist",
     template: "%s | Shibil S"
   },
-  description: "I help businesses turn ads into predictable revenue through high-converting Meta Ads, Google Ads, and technical SEO strategies.",
+  description: "Results-driven Digital Marketing Executive with a strong background in SEO, SEM, SMM, and Email Marketing. I help businesses generate leads and increase ROI through data-driven campaigns.",
   openGraph: {
     type: "website",
     locale: "en_IN",
@@ -40,12 +40,12 @@ const personSchema: WithContext<Person> = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Shibil S",
-  jobTitle: "Digital Marketing Specialist",
+  jobTitle: "Digital Marketing Executive",
   url: baseUrl,
   sameAs: [
     "https://linkedin.com/in/shibil-s-433000370"
   ],
-  knowsAbout: ["Search Engine Optimization", "Meta Ads", "Google Ads", "E-commerce Marketing", "Conversion Rate Optimization"]
+  knowsAbout: ["Search Engine Optimization (SEO)", "Search Engine Marketing (SEM)", "Social Media Marketing (SMM)", "Email Marketing", "Web Designing", "Meta Ads", "E-commerce Product Management", "Conversion Rate Optimization (CRO)", "Affiliate & Influencer Marketing"]
 };
 
 export default function RootLayout({

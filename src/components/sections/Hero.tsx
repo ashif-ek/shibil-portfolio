@@ -16,9 +16,12 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <span className="inline-block py-1 px-3 rounded-full bg-blue-500/10 text-blue-400 text-sm font-medium tracking-wide mb-6 border border-blue-500/20">
-            Digital Marketing Specialist
+          <span className="inline-block py-1 px-3 rounded-full bg-blue-500/10 text-blue-400 text-sm font-medium tracking-wide mb-4 border border-blue-500/20 uppercase tracking-widest">
+            Shibil S
           </span>
+          <h2 className="text-xl md:text-2xl font-medium text-gray-400 mb-6 font-mono">
+            Digital Marketing Executive
+          </h2>
         </motion.div>
 
         <motion.h1 
@@ -39,7 +42,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          Data-driven growth strategies using Meta Ads, Google Ads, and SEO to scale local brands and e-commerce stores efficiently.
+          Results-driven Digital Marketing Executive specializing in SEO, SEM, and SMM. I create data-driven campaigns that improve online visibility, generate qualified leads, and increase ROI.
         </motion.p>
 
         <motion.div 
@@ -71,10 +74,10 @@ export default function Hero() {
         >
           <p className="text-sm text-gray-500 font-medium tracking-widest uppercase mb-8">Expertise In</p>
           <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-70">
-            <div className="flex items-center gap-2"><Target className="w-5 h-5" /> <span className="font-semibold text-lg">Meta Ads</span></div>
-            <div className="flex items-center gap-2"><BarChart3 className="w-5 h-5" /> <span className="font-semibold text-lg">Google Ads</span></div>
-            <div className="flex items-center gap-2"><Search className="w-5 h-5" /> <span className="font-semibold text-lg">SEO Strategy</span></div>
-            <div className="flex items-center gap-2"><ShoppingCart className="w-5 h-5" /> <span className="font-semibold text-lg">E-Commerce</span></div>
+            <div className="flex items-center gap-2"><Target className="w-5 h-5" /> <span className="font-semibold text-lg">Search Engine Optimization</span></div>
+            <div className="flex items-center gap-2"><BarChart3 className="w-5 h-5" /> <span className="font-semibold text-lg">Google Ads (PPC)</span></div>
+            <div className="flex items-center gap-2"><Search className="w-5 h-5" /> <span className="font-semibold text-lg">Social Media Marketing</span></div>
+            <div className="flex items-center gap-2"><ShoppingCart className="w-5 h-5" /> <span className="font-semibold text-lg">E-Commerce Management</span></div>
           </div>
         </motion.div>
       </div>

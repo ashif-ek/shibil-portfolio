@@ -5,19 +5,19 @@ import { motion } from "framer-motion";
 const skillsGroup = [
   {
     category: "Paid Advertising",
-    skills: ["Meta Ads Manager", "Google Ads", "A/B Creative Testing", "Conversion Tracking", "Retargeting Funnels"]
+    skills: ["Meta Ads Manager", "Google Ads (PPC)", "SEM", "A/B Creative Testing", "Conversion Tracking"]
   },
   {
     category: "SEO & Content",
-    skills: ["Technical SEO", "Keyword Research", "On-Page Optimization", "Video Editing", "Content Strategy"]
+    skills: ["Technical SEO", "On-page SEO", "Off-page SEO", "Keyword Research", "SEO Audits", "Sitemaps"]
   },
   {
-    category: "E-Commerce Growth",
-    skills: ["Online Selling", "Shopify/WooCommerce", "Cart Abandonment", "ROAS Optimization", "Product Feed Management"]
+    category: "Marketing & Growth",
+    skills: ["Social Media Marketing", "Email Marketing", "CRO", "Affiliate Marketing", "Influencer Marketing"]
   },
   {
-    category: "Analytics & Tools",
-    skills: ["Google Analytics 4", "Google Tag Manager", "Semrush/Ahrefs", "Looker Studio", "Excel/Sheets"]
+    category: "E-Commerce & Tools",
+    skills: ["Amazon Management", "Shopify", "Online Selling", "Google Analytics", "Excel (Data Entry)", "Web Designing"]
   }
 ];
 
