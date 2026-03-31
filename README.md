@@ -86,3 +86,10 @@ This portfolio is engineered for high-intent search visibility, targeting techni
 - **Email**: sshibil14954@gmail.com
 - **LinkedIn**: [linkedin.com/in/shibil-s-433000370](https://linkedin.com/in/shibil-s-433000370)
 - **WhatsApp**: [+91 8590658417](https://wa.me/918590658417)
+
+## 👨‍💻 Developed By
+
+This portfolio was architected and developed by **Ashif E.K**.
+
+- **Website**: [ashifek.in](https://ashifek.in)
+- **Repository**: [github.com/ashif-ek/shibil-portfolio](https://github.com/ashif-ek/shibil-portfolio)
