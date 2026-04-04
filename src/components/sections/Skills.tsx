@@ -2,52 +2,15 @@
 
 import { motion } from "framer-motion";
 
-const skillsGroup = [
-  {
-    category: "Paid Advertising",
-    skills: [
-      "Meta Ads Manager",
-      "Google Ads (PPC)",
-      "SEM",
-      "A/B Creative Testing",
-      "Conversion Tracking",
-    ],
-  },
-  {
-    category: "SEO & Content",
-    skills: [
-      "Technical SEO",
-      "On-page SEO",
-      "Off-page SEO",
-      "Keyword Research",
-      "SEO Audits",
-      "Sitemaps",
-    ],
-  },
-  {
-    category: "Marketing & Growth",
-    skills: [
-      "Social Media Marketing",
-      "Email Marketing",
-      "CRO",
-      "Affiliate Marketing",
-      "Influencer Marketing",
-    ],
-  },
-  {
-    category: "E-Commerce & Tools",
-    skills: [
-      "Amazon Management",
-      "Shopify",
-      "Online Selling",
-      "Google Analytics",
-      "Excel (Data Entry)",
-      "Web Designing",
-    ],
-  },
-];
+interface SkillData {
+  id: string;
+  category: string;
+  skillsList: string;
+}
 
-export default function Skills() {
+export default function Skills({ data }: { data: SkillData[] }) {
+  if (!data?.length) return null;
+
   return (
     <section id="skills" className="py-24 bg-zinc-950 border-y border-zinc-900">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -60,9 +23,9 @@ export default function Skills() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {skillsGroup.map((group, groupIdx) => (
+          {data.map((group: SkillData, groupIdx: number) => (
             <motion.div
-              key={groupIdx}
+              key={group.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -75,12 +38,12 @@ export default function Skills() {
               </h3>
 
               <div className="flex flex-wrap gap-2">
-                {group.skills.map((skill, skillIdx) => (
+                {group.skillsList.split(",").map((skill: string, skillIdx: number) => (
                   <span
                     key={skillIdx}
                     className="px-3 py-1.5 bg-zinc-900 border border-zinc-800 text-zinc-300 text-sm rounded-lg hover:border-zinc-700 hover:text-white transition-colors cursor-default"
                   >
-                    {skill}
+                    {skill.trim()}
                   </span>
                 ))}
               </div>

@@ -3,34 +3,18 @@
 import { motion } from "framer-motion";
 import { Building2, Calendar, MapPin } from "lucide-react";
 
-const experiences = [
-  {
-    role: "Digital Marketing Executive",
-    company: "Hogar Technologies and Innovations LLP (HTI)",
-    period: "Oct 2025 - March 2026",
-    location: "Kerala, India",
-    description: [
-      "Coordinated with marketing teams and clients to develop SEO strategy based on Google Analytics, keyword rankings, and competitive analysis.",
-      "Identified keyword optimization opportunities and carried out thorough competitor research.",
-      "Audited client websites for SEO and made suggestions for improving web pages and sitemaps, which significantly increased organic traffic.",
-      "Managed and optimized performance marketing campaigns to drive measurable business growth.",
-    ],
-  },
-  {
-    role: "Digital Marketing Executive",
-    company: "Airin industrial corporation",
-    period: "April 2025 - August 2025",
-    location: "Nilambur, Kerala",
-    description: [
-      "Gained hands-on experience in Search Engine Optimization (SEO) and technical website audits.",
-      "Assisted in planning and executing Search Engine Marketing (SEM) via Meta and Google Ads.",
-      "Managed and created engaging content for social media platforms including Facebook, Instagram, and LinkedIn.",
-      "Handled E-commerce Product Management for Amazon, optimizing listings for better discoverability.",
-    ],
-  },
-];
+interface ExperienceData {
+  id: string;
+  role: string;
+  company: string;
+  period: string | null;
+  location: string | null;
+  description: string | null;
+}
 
-export default function Experience() {
+export default function Experience({ data }: { data: ExperienceData[] }) {
+  if (!data?.length) return null;
+
   return (
     <section id="experience" className="py-24 bg-black">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -45,9 +29,9 @@ export default function Experience() {
         </div>
 
         <div className="max-w-4xl mx-auto space-y-12">
-          {experiences.map((exp, index) => (
+          {data.map((exp: ExperienceData, index: number) => (
             <motion.div
-              key={index}
+              key={exp.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -78,7 +62,7 @@ export default function Experience() {
               {/* Right Side: Description */}
               <div className="p-6 rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-zinc-700 transition-colors">
                 <ul className="space-y-3 text-zinc-400 text-sm">
-                  {exp.description.map((item, i) => (
+                  {exp.description?.split("\n").map((item: string, i: number) => (
                     <li key={i} className="flex gap-2">
                       <span className="text-blue-500 mt-1">▹</span>
                       <span>{item}</span>

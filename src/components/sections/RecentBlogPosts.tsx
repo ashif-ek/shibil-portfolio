@@ -6,18 +6,18 @@ import { ArrowRight, BookOpen } from "lucide-react";
 
 // In a real environment, you'd fetch this from your internal MDX library.
 // For now, I'll mock the top posts to ensure the homepage UI is complete.
-const featuredPosts = [
-  {
-    title: "How to Scale E-Commerce Revenue with Meta Ads in 2024",
-    slug: "scaling-ecommerce-with-meta-ads",
-    date: "Mar 30, 2024",
-    category: "Paid Ads",
-    excerpt:
-      "A deep dive into modern Meta Ads strategies, focusing on creative testing and account consolidation.",
-  },
-];
+interface BlogPostData {
+  id: string;
+  title: string;
+  slug: string;
+  date: string | null;
+  category: string | null;
+  excerpt: string | null;
+}
 
-export default function RecentBlogPosts() {
+export default function RecentBlogPosts({ data }: { data: BlogPostData[] }) {
+  if (!data?.length) return null;
+
   return (
     <section id="blog" className="py-24 bg-zinc-950 border-t border-zinc-900">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -41,9 +41,9 @@ export default function RecentBlogPosts() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredPosts.map((post, index) => (
+          {data.map((post: BlogPostData, index: number) => (
             <motion.div
-              key={index}
+              key={post.id}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-6">
         <div className="text-center md:text-left">
           <Link href="/" className="text-2xl font-bold tracking-tighter text-white">
-            Shibil<span className="text-blue-500">.</span>
+            Shibil <span className="text-blue-500">S</span>
           </Link>
           <p className="mt-2 text-sm text-zinc-500">
             Digital Marketing Specialist & Conversion Strategist.

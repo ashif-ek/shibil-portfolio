@@ -8,7 +8,7 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Link href="/" className="text-xl font-bold tracking-tighter text-white">
-            Shibil<span className="text-blue-500">.</span>
+            Shibil <span className="text-blue-500">S</span>
           </Link>
         </div>
 

@@ -1,62 +1,69 @@
 import { db } from "@/lib/db";
 export const dynamic = "force-dynamic";
-import { projects } from "@/lib/schema";
-import { createProject, deleteProject } from "@/actions/project";
+import { projects, services, experiences, blogPosts, certificates, skills } from "@/lib/schema";
+import { logout } from "@/actions/auth";
+import { LogOut } from "lucide-react";
+import AdminContent from "./AdminContent";
+import { desc } from "drizzle-orm";
 
 export default async function AdminPage() {
-  const data = await db.select().from(projects);
+  const [
+    projectsData,
+    servicesData,
+    experiencesData,
+    blogPostsData,
+    certificatesData,
+    skillsData,
+  ] = await Promise.all([
+    db.select().from(projects).orderBy(desc(projects.createdAt)),
+    db.select().from(services).orderBy(desc(services.createdAt)),
+    db.select().from(experiences).orderBy(desc(experiences.createdAt)),
+    db.select().from(blogPosts).orderBy(desc(blogPosts.createdAt)),
+    db.select().from(certificates).orderBy(desc(certificates.createdAt)),
+    db.select().from(skills).orderBy(desc(skills.createdAt)),
+  ]);
+
+  const allData = {
+    projects: projectsData,
+    services: servicesData,
+    experiences: experiencesData,
+    blogPosts: blogPostsData,
+    certificates: certificatesData,
+    skills: skillsData,
+  };
 
   return (
-    <div className="p-10 text-white min-h-screen bg-black">
-      <h1 className="text-3xl font-bold mb-8">Admin Panel</h1>
-
-      <form
-        action={createProject}
-        className="mb-12 glass-panel p-6 rounded-2xl border border-white/10 max-w-xl"
-      >
-        <h2 className="text-xl font-semibold mb-4">Add New Project</h2>
-        <div className="flex flex-col gap-4">
-          <input
-            name="title"
-            placeholder="Project Title"
-            required
-            className="bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-          />
-          <textarea
-            name="description"
-            placeholder="Project Description"
-            className="bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50 min-h-[100px]"
-          />
-          <button className="bg-white text-black font-bold px-6 py-2 rounded-lg hover:bg-gray-100 transition-colors w-fit">
-            Add Project
-          </button>
+    <div className="p-0 text-zinc-900 min-h-screen bg-[#f2f3f3] selection:bg-orange-100 selection:text-orange-900">
+      {/* Amazon Console Style Top Header */}
+      <header className="h-14 bg-[#232f3e] text-white flex items-center justify-between px-6 sticky top-0 z-50 shadow-md">
+        <div className="flex items-center gap-4">
+          <div className="font-black text-xl tracking-tight flex items-center gap-2">
+            <span className="text-orange-400">Admin-Panel</span>
+          </div>
+          <div className="hidden md:flex items-center gap-6 ml-8 text-sm font-medium text-white/70">
+            <span className="text-white border-b-2 border-orange-500 pb-4 mt-4">Dashboard</span>
+          </div>
         </div>
-      </form>
+        <form action={logout}>
+          <button
+            type="submit"
+            className="flex items-center gap-2 px-3 py-1.5 rounded bg-white/10 hover:bg-white/20 text-white/90 text-xs font-bold transition-all border border-white/10"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            Sign Out
+          </button>
+        </form>
+      </header>
 
-      <div className="grid gap-6">
-        <h2 className="text-xl font-semibold">Existing Projects</h2>
-        {data.length === 0 ? (
-          <p className="text-zinc-500 italic">No projects found.</p>
-        ) : (
-          data.map((p) => (
-            <div
-              key={p.id}
-              className="border border-white/5 p-6 rounded-2xl bg-zinc-900/50 flex justify-between items-start gap-4"
-            >
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-white mb-2">{p.title}</h3>
-                <p className="text-zinc-400 text-sm leading-relaxed">{p.description}</p>
-                <p className="text-zinc-600 text-xs mt-4 font-mono">ID: {p.id}</p>
-              </div>
-
-              <form action={deleteProject.bind(null, p.id)}>
-                <button className="text-rose-500 hover:text-rose-400 font-medium px-3 py-1 border border-rose-500/20 rounded-md hover:bg-rose-500/10 transition-colors">
-                  Delete
-                </button>
-              </form>
-            </div>
-          ))
-        )}
+      <div className="max-w-[1600px] mx-auto p-6 lg:p-10">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-zinc-900 flex items-center gap-2">
+            Portfolio <span className="font-normal text-zinc-400">/</span> Management
+          </h1>
+          <div className="h-1 w-12 bg-orange-500 mt-2 rounded-full" />
+        </div>
+        
+        <AdminContent data={allData} />
       </div>
     </div>
   );
