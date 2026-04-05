@@ -16,11 +16,11 @@ const baseUrl =
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: "Shibil S | Digital Marketing Executive & SEO Specialist",
+    default: "Shibil S | Best Digital Marketing Strategist in Kerala",
     template: "%s | Shibil S",
   },
   description:
-    "Results-driven Digital Marketing Executive with a strong background in SEO, SEM, SMM, and Email Marketing. I help businesses generate leads and increase ROI through data-driven campaigns.",
+    "Results-driven Digital Marketing Strategist in Kerala specializing in SEO, SEM, SMM, and E-commerce growth. I help businesses scale through data-driven campaigns and ROI-focused marketing.",
   openGraph: {
     type: "website",
     locale: "en_IN",
@@ -43,7 +43,7 @@ const personSchema: WithContext<Person> = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: "Shibil S",
-  jobTitle: "Digital Marketing Executive",
+  jobTitle: "Digital Marketing Strategist",
   url: baseUrl,
   sameAs: ["https://linkedin.com/in/shibil-s-433000370"],
   knowsAbout: [

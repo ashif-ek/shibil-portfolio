@@ -29,7 +29,7 @@ export default function Hero() {
             Shibil S
           </span>
           <h2 className="text-xl md:text-2xl font-medium text-gray-400 mb-6 font-mono">
-            Digital Marketing Executive
+            Best Digital Marketing Strategist in Kerala
           </h2>
         </motion.div>
 
