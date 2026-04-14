@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import WhatsAppButton from "@/components/common/WhatsAppButton";
+import BackToTop from "@/components/common/BackToTop";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import JsonLd from "@/components/seo/JsonLd";
 import { Person, WithContext } from "schema-dts";
@@ -81,6 +82,7 @@ export default function RootLayout({
           <Navbar />
           {children}
           <WhatsAppButton />
+          <BackToTop />
           <Footer />
           <GoogleAnalytics gaId="G-XXXXXXX" />
         </ThemeProvider>

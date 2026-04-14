@@ -6,8 +6,8 @@ import Image from "next/image";
 export default function About() {
   return (
     <section id="about" className="py-24 bg-background border-t border-border relative overflow-hidden">
-      {/* Background Glow */}
-      <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-blue-500/15 dark:bg-blue-500/10 rounded-full blur-[150px] -translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+      {/* Background Glow - Only in dark mode for clarity */}
+      <div className="absolute top-1/2 left-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[150px] -translate-y-1/2 -translate-x-1/2 pointer-events-none hidden dark:block" />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -53,9 +53,9 @@ export default function About() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="relative mx-auto w-full max-w-md lg:max-w-none aspect-[4/5] lg:h-[600px] rounded-3xl overflow-hidden border border-border shadow-2xl"
           >
-            <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent z-10" />
+            {/* No gradient overlay for high clarity */}
             <Image
-              src="/shibil-profile.png"
+              src="/image.png"
               alt="Shibil S - Digital Marketing Specialist"
               fill
               className="object-cover object-center"

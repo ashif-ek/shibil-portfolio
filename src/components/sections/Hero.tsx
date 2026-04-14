@@ -16,8 +16,8 @@ import {
 export default function Hero() {
   return (
     <section className="relative min-h-[90vh] flex items-center pt-24 pb-16 overflow-hidden">
-      {/* Background Gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.1)_0,transparent_100%)] dark:bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.15)_0,transparent_100%)] z-0" />
+      {/* Background Gradient - Hidden in light mode to prevent "foggy" feel */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.1)_0,transparent_100%)] dark:bg-[radial-gradient(circle_at_center,rgba(59,130,246,0.15)_0,transparent_100%)] z-0 hidden dark:block" />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10 text-center">
         <motion.div

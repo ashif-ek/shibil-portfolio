@@ -52,8 +52,8 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-24 bg-background relative overflow-hidden border-t border-border">
-      {/* Subtle Background Glow */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
+      {/* Subtle Background Glow - Only in dark mode for clarity */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none hidden dark:block" />
 
       {/* Modern Toast Popup */}
       <AnimatePresence>
