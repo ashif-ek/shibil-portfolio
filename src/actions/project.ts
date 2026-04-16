@@ -20,20 +20,20 @@ const schema = z.object({
 export async function createProject(formData: FormData) {
   try {
     const rawData = {
-      title: formData.get("title"),
-      client: formData.get("client"),
-      tags: formData.get("tags"),
-      problem: formData.get("problem"),
-      strategy: formData.get("strategy"),
-      execution: formData.get("execution"),
-      result: formData.get("result"),
-      description: formData.get("description"),
+      title: formData.get("title") as string,
+      client: formData.get("client") as string,
+      tags: formData.get("tags") as string,
+      problem: formData.get("problem") as string,
+      strategy: formData.get("strategy") as string,
+      execution: formData.get("execution") as string,
+      result: formData.get("result") as string,
+      description: formData.get("description") as string,
     };
 
     const parsed = schema.safeParse(rawData);
 
     if (!parsed.success) {
-      return { success: false, error: parsed.error.errors[0].message };
+      return { success: false, error: parsed.error.issues[0].message };
     }
 
     await db.insert(projects).values({
@@ -72,20 +72,20 @@ export async function deleteProject(id: string) {
 export async function updateProject(id: string, formData: FormData) {
   try {
     const rawData = {
-      title: formData.get("title"),
-      client: formData.get("client"),
-      tags: formData.get("tags"),
-      problem: formData.get("problem"),
-      strategy: formData.get("strategy"),
-      execution: formData.get("execution"),
-      result: formData.get("result"),
-      description: formData.get("description"),
+      title: formData.get("title") as string,
+      client: formData.get("client") as string,
+      tags: formData.get("tags") as string,
+      problem: formData.get("problem") as string,
+      strategy: formData.get("strategy") as string,
+      execution: formData.get("execution") as string,
+      result: formData.get("result") as string,
+      description: formData.get("description") as string,
     };
 
     const parsed = schema.safeParse(rawData);
 
     if (!parsed.success) {
-      return { success: false, error: parsed.error.errors[0].message };
+      return { success: false, error: parsed.error.issues[0].message };
     }
 
     await db

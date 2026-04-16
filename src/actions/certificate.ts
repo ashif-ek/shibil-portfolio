@@ -17,17 +17,17 @@ const schema = z.object({
 export async function createCertificate(formData: FormData) {
   try {
     const rawData = {
-      title: formData.get("title"),
-      issuer: formData.get("issuer"),
-      date: formData.get("date"),
-      link: formData.get("link"),
-      icon: formData.get("icon"),
+      title: formData.get("title") as string,
+      issuer: formData.get("issuer") as string,
+      date: formData.get("date") as string,
+      link: formData.get("link") as string,
+      icon: formData.get("icon") as string,
     };
 
     const parsed = schema.safeParse(rawData);
 
     if (!parsed.success) {
-      return { success: false, error: parsed.error.errors[0].message };
+      return { success: false, error: parsed.error.issues[0].message };
     }
 
     await db.insert(certificates).values({
@@ -63,17 +63,17 @@ export async function deleteCertificate(id: string) {
 export async function updateCertificate(id: string, formData: FormData) {
   try {
     const rawData = {
-      title: formData.get("title"),
-      issuer: formData.get("issuer"),
-      date: formData.get("date"),
-      link: formData.get("link"),
-      icon: formData.get("icon"),
+      title: formData.get("title") as string,
+      issuer: formData.get("issuer") as string,
+      date: formData.get("date") as string,
+      link: formData.get("link") as string,
+      icon: formData.get("icon") as string,
     };
 
     const parsed = schema.safeParse(rawData);
 
     if (!parsed.success) {
-      return { success: false, error: parsed.error.errors[0].message };
+      return { success: false, error: parsed.error.issues[0].message };
     }
 
     await db

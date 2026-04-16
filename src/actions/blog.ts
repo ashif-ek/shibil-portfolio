@@ -18,18 +18,18 @@ const schema = z.object({
 export async function createBlogPost(formData: FormData) {
   try {
     const rawData = {
-      title: formData.get("title"),
-      slug: formData.get("slug"),
-      date: formData.get("date"),
-      category: formData.get("category"),
-      excerpt: formData.get("excerpt"),
-      content: formData.get("content"),
+      title: formData.get("title") as string,
+      slug: formData.get("slug") as string,
+      date: formData.get("date") as string,
+      category: formData.get("category") as string,
+      excerpt: formData.get("excerpt") as string,
+      content: formData.get("content") as string,
     };
 
     const parsed = schema.safeParse(rawData);
 
     if (!parsed.success) {
-      return { success: false, error: parsed.error.errors[0].message };
+      return { success: false, error: parsed.error.issues[0].message };
     }
 
     await db.insert(blogPosts).values({
@@ -68,18 +68,18 @@ export async function deleteBlogPost(id: string) {
 export async function updateBlogPost(id: string, formData: FormData) {
   try {
     const rawData = {
-      title: formData.get("title"),
-      slug: formData.get("slug"),
-      date: formData.get("date"),
-      category: formData.get("category"),
-      excerpt: formData.get("excerpt"),
-      content: formData.get("content"),
+      title: formData.get("title") as string,
+      slug: formData.get("slug") as string,
+      date: formData.get("date") as string,
+      category: formData.get("category") as string,
+      excerpt: formData.get("excerpt") as string,
+      content: formData.get("content") as string,
     };
 
     const parsed = schema.safeParse(rawData);
 
     if (!parsed.success) {
-      return { success: false, error: parsed.error.errors[0].message };
+      return { success: false, error: parsed.error.issues[0].message };
     }
 
     await db

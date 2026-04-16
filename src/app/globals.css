@@ -24,15 +24,15 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
 
-  --animate-luxury-shimmer: luxury-shimmer 4.5s cubic-bezier(0.15, 0, 0.2, 1) infinite;
-  --animate-luxury-pulse: luxury-pulse 4.5s ease-in-out infinite;
+  --animate-luxury-shimmer: luxury-shimmer 2s linear infinite;
+  --animate-luxury-pulse: luxury-pulse 2s ease-in-out infinite;
 
   @keyframes luxury-shimmer {
     0% {
-      background-position: 450% 0;
+      background-position: 200% 0;
     }
     100% {
-      background-position: -450% 0;
+      background-position: -200% 0;
     }
   }
 
@@ -41,35 +41,29 @@
       opacity: 1;
     }
     50% {
-      opacity: 0.85;
+      opacity: 0.9;
     }
   }
 }
 
 @utility animate-shimmer {
   background: linear-gradient(
-    110deg,
+    90deg,
     rgba(255, 255, 255, 0) 0%,
-    rgba(0, 115, 187, 0.03) 20%,
-    rgba(0, 115, 187, 0.1) 40%,
-    rgba(255, 255, 255, 1) 50%,
-    rgba(0, 115, 187, 0.1) 60%,
-    rgba(0, 115, 187, 0.03) 80%,
+    rgba(255, 255, 255, 0.6) 50%,
     rgba(255, 255, 255, 0) 100%
   );
   .dark & {
     background: linear-gradient(
-      110deg,
+      90deg,
       rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.01) 30%,
-      rgba(255, 255, 255, 0.25) 50%,
-      rgba(255, 255, 255, 0.01) 70%,
+      rgba(255, 255, 255, 0.05) 50%,
       rgba(255, 255, 255, 0) 100%
     );
   }
-  background-size: 450% 100%;
-  animation: luxury-shimmer 4.5s cubic-bezier(0.15, 0, 0.2, 1) infinite, 
-             luxury-pulse 4.5s ease-in-out infinite;
+  background-size: 200% 100%;
+  animation: luxury-shimmer 2s linear infinite, 
+             luxury-pulse 2s ease-in-out infinite;
 }
 
 @layer base {

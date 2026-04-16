@@ -54,14 +54,14 @@ export async function deleteSkill(id: string) {
 export async function updateSkill(id: string, formData: FormData) {
   try {
     const rawData = {
-      category: formData.get("category"),
-      skillsList: formData.get("skillsList"),
+      category: formData.get("category") as string,
+      skillsList: formData.get("skillsList") as string,
     };
 
     const parsed = schema.safeParse(rawData);
 
     if (!parsed.success) {
-      return { success: false, error: parsed.error.errors[0].message };
+      return { success: false, error: parsed.error.issues[0].message };
     }
 
     await db

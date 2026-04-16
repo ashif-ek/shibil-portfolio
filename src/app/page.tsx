@@ -4,6 +4,8 @@ import { db } from "@/lib/db";
 import { projects, services, experiences, blogPosts, certificates, skills } from "@/lib/schema";
 import { seed } from "@/lib/seed";
 import { desc } from "drizzle-orm";
+import Hero from "@/components/sections/Hero";
+import About from "@/components/sections/About";
 import { 
   ServiceSkeleton, 
   ProjectSkeleton, 
@@ -13,8 +15,6 @@ import {
   SkillsSkeleton 
 } from "@/components/sections/SectionSkeletons";
 
-const Hero = dynamic(() => import("@/components/sections/Hero"), { ssr: true });
-const About = dynamic(() => import("@/components/sections/About"), { ssr: true });
 const Services = dynamic(() => import("@/components/sections/Services"));
 const CaseStudies = dynamic(() => import("@/components/sections/CaseStudies"));
 const Experience = dynamic(() => import("@/components/sections/Experience"));

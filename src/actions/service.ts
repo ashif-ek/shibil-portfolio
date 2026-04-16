@@ -18,18 +18,18 @@ const schema = z.object({
 export async function createService(formData: FormData) {
   try {
     const rawData = {
-      title: formData.get("title"),
-      icon: formData.get("icon"),
-      problem: formData.get("problem"),
-      solution: formData.get("solution"),
-      outcome: formData.get("outcome"),
-      link: formData.get("link"),
+      title: formData.get("title") as string,
+      icon: formData.get("icon") as string,
+      problem: formData.get("problem") as string,
+      solution: formData.get("solution") as string,
+      outcome: formData.get("outcome") as string,
+      link: formData.get("link") as string,
     };
 
     const parsed = schema.safeParse(rawData);
 
     if (!parsed.success) {
-      return { success: false, error: parsed.error.errors[0].message };
+      return { success: false, error: parsed.error.issues[0].message };
     }
 
     await db.insert(services).values({
@@ -66,18 +66,18 @@ export async function deleteService(id: string) {
 export async function updateService(id: string, formData: FormData) {
   try {
     const rawData = {
-      title: formData.get("title"),
-      icon: formData.get("icon"),
-      problem: formData.get("problem"),
-      solution: formData.get("solution"),
-      outcome: formData.get("outcome"),
-      link: formData.get("link"),
+      title: formData.get("title") as string,
+      icon: formData.get("icon") as string,
+      problem: formData.get("problem") as string,
+      solution: formData.get("solution") as string,
+      outcome: formData.get("outcome") as string,
+      link: formData.get("link") as string,
     };
 
     const parsed = schema.safeParse(rawData);
 
     if (!parsed.success) {
-      return { success: false, error: parsed.error.errors[0].message };
+      return { success: false, error: parsed.error.issues[0].message };
     }
 
     await db

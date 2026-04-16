@@ -17,17 +17,17 @@ const schema = z.object({
 export async function createExperience(formData: FormData) {
   try {
     const rawData = {
-      role: formData.get("role"),
-      company: formData.get("company"),
-      period: formData.get("period"),
-      location: formData.get("location"),
-      description: formData.get("description"),
+      role: formData.get("role") as string,
+      company: formData.get("company") as string,
+      period: formData.get("period") as string,
+      location: formData.get("location") as string,
+      description: formData.get("description") as string,
     };
 
     const parsed = schema.safeParse(rawData);
 
     if (!parsed.success) {
-      return { success: false, error: parsed.error.errors[0].message };
+      return { success: false, error: parsed.error.issues[0].message };
     }
 
     await db.insert(experiences).values({
@@ -63,17 +63,17 @@ export async function deleteExperience(id: string) {
 export async function updateExperience(id: string, formData: FormData) {
   try {
     const rawData = {
-      role: formData.get("role"),
-      company: formData.get("company"),
-      period: formData.get("period"),
-      location: formData.get("location"),
-      description: formData.get("description"),
+      role: formData.get("role") as string,
+      company: formData.get("company") as string,
+      period: formData.get("period") as string,
+      location: formData.get("location") as string,
+      description: formData.get("description") as string,
     };
 
     const parsed = schema.safeParse(rawData);
 
     if (!parsed.success) {
-      return { success: false, error: parsed.error.errors[0].message };
+      return { success: false, error: parsed.error.issues[0].message };
     }
 
     await db
