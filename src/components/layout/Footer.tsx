@@ -110,10 +110,10 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-border/50 flex flex-col md:flex-row items-center justify-between gap-6">
-          <p className="text-xs text-muted-foreground/60 text-center md:text-left">
+          <p className="text-xs text-muted-foreground text-center md:text-left">
             &copy; {currentYear} Shibil S. All rights reserved. Registered Digital Marketing Professional.
           </p>
-          <div className="flex items-center gap-6 text-xs text-muted-foreground/60">
+          <div className="flex items-center gap-6 text-xs text-muted-foreground">
             <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
             <p>
               Developed by{" "}

@@ -64,6 +64,7 @@
   background-size: 200% 100%;
   animation: luxury-shimmer 2s linear infinite, 
              luxury-pulse 2s ease-in-out infinite;
+  will-change: transform, opacity;
 }
 
 @layer base {

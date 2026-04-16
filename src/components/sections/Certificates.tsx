@@ -61,7 +61,7 @@ export default function Certificates({ data }: { data: CertificateData[] }) {
                       rel="noopener noreferrer" 
                       className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-500 transition-colors flex items-center gap-1"
                     >
-                      Verify <ExternalLink className="w-3 h-3" />
+                      Verify <span className="sr-only">{cert.title} Credential</span> <ExternalLink className="w-3 h-3" />
                     </a>
                   )}
                 </div>

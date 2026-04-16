@@ -57,7 +57,7 @@ export default function Navbar() {
           <Link
             href="/admin"
             className="p-2 text-muted-foreground hover:text-blue-500 hover:bg-blue-500/10 rounded-lg transition-all duration-300"
-            title="Admin Access"
+            title="Access Admin Dashboard"
             aria-label="Access Admin Dashboard"
           >
             <UserCog className="w-5 h-5" />
