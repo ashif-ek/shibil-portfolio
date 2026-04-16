@@ -24,7 +24,7 @@ export default function Footer() {
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="p-2 rounded-full bg-muted border border-border text-muted-foreground hover:text-blue-600 hover:border-blue-600/30 transition-all duration-300"
-                aria-label="Connect on LinkedIn"
+                aria-label="Connect with Shibil S on LinkedIn"
               >
                 <Share2 className="w-4 h-4" />
               </a>
@@ -38,7 +38,7 @@ export default function Footer() {
               <a 
                 href="#" 
                 className="p-2 rounded-full bg-muted border border-border text-muted-foreground hover:text-blue-600 hover:border-blue-600/30 transition-all duration-300"
-                aria-label="View Instagram Profile"
+                aria-label="Visit Shibil's Instagram Profile"
               >
                 <Camera className="w-4 h-4" />
               </a>
@@ -63,16 +63,23 @@ export default function Footer() {
           <div>
             <h4 className="font-bold text-foreground mb-6 uppercase tracking-widest text-xs">Navigation</h4>
             <ul className="space-y-4">
-              {["About Me", "Case Studies", "Certifications", "Experience", "Marketing Blog"].map((item) => (
-                <li key={item}>
-                  <Link 
-                    href={`#${item.toLowerCase().replace(" ", "-")}`} 
-                    className="text-sm text-muted-foreground hover:text-blue-500 transition-colors"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
+              {["About Me", "Case Studies", "Certifications", "Experience", "Marketing Blog"].map((item) => {
+                const hrefMap: Record<string, string> = {
+                  "About Me": "#about",
+                  "Certifications": "#certificates",
+                  "Marketing Blog": "#blog",
+                };
+                return (
+                  <li key={item}>
+                    <Link 
+                      href={hrefMap[item] || `#${item.toLowerCase().replace(" ", "-")}`} 
+                      className="text-sm text-muted-foreground hover:text-blue-500 transition-colors"
+                    >
+                      {item}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 

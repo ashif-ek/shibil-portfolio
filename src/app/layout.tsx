@@ -22,6 +22,16 @@ export const metadata: Metadata = {
   },
   description:
     "Results-driven Digital Marketing Strategist in Kerala specializing in SEO, SEM, SMM, and E-commerce growth. I help businesses scale through data-driven campaigns and ROI-focused marketing.",
+  keywords: [
+    "Digital Marketing Strategist Kerala",
+    "Best SEO Expert in Kerala",
+    "Performance Marketing Specialist India",
+    "Social Media Marketing Kerala",
+    "E-commerce Growth Consultant",
+    "Google Ads Expert Kerala",
+    "Shibil S Digital Marketing",
+  ],
+  category: "technology",
   openGraph: {
     type: "website",
     locale: "en_IN",
@@ -38,6 +48,12 @@ export const metadata: Metadata = {
   alternates: {
     canonical: baseUrl,
   },
+};
+
+export const viewport = {
+  themeColor: "#3b82f6",
+  width: "device-width",
+  initialScale: 1,
 };
 
 const personSchema: WithContext<Person> = {
