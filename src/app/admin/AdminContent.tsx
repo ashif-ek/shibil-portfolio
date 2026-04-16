@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Briefcase, 
@@ -11,17 +11,28 @@ import {
   Folder,
   Plus,
   Trash2,
-  ChevronRight,
-  LayoutGrid,
+  Pencil,
+  X,
   List
 } from "lucide-react";
-import { logout } from "@/actions/auth";
-import { createProject, deleteProject } from "@/actions/project";
-import { createService, deleteService } from "@/actions/service";
-import { createExperience, deleteExperience } from "@/actions/experience";
-import { createBlogPost, deleteBlogPost } from "@/actions/blog";
-import { createCertificate, deleteCertificate } from "@/actions/certificate";
-import { createSkill, deleteSkill } from "@/actions/skill";
+import { 
+  createProject, deleteProject, updateProject 
+} from "@/actions/project";
+import { 
+  createService, deleteService, updateService 
+} from "@/actions/service";
+import { 
+  createExperience, deleteExperience, updateExperience 
+} from "@/actions/experience";
+import { 
+  createBlogPost, deleteBlogPost, updateBlogPost 
+} from "@/actions/blog";
+import { 
+  createCertificate, deleteCertificate, updateCertificate 
+} from "@/actions/certificate";
+import { 
+  createSkill, deleteSkill, updateSkill 
+} from "@/actions/skill";
 
 type Section = "projects" | "services" | "experience" | "blog" | "certificates" | "skills";
 
@@ -38,6 +49,8 @@ interface AdminContentProps {
 
 export default function AdminContent({ data }: AdminContentProps) {
   const [activeSegment, setActiveSegment] = useState<Section>("projects");
+  const [editingItem, setEditingItem] = useState<any | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   const segments = [
     { id: "projects", label: "Projects", icon: <Folder className="w-4 h-4" /> },
@@ -48,9 +61,46 @@ export default function AdminContent({ data }: AdminContentProps) {
     { id: "skills", label: "Skills", icon: <Zap className="w-4 h-4" /> },
   ];
 
+  const handleEdit = (item: any) => {
+    setEditingItem(item);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const cancelEdit = () => {
+    setEditingItem(null);
+  };
+
+  const handleDelete = async (id: string, deleteFn: (id: string) => Promise<any>, type: string) => {
+    if (!window.confirm(`Are you sure you want to delete this ${type}? This action cannot be undone.`)) {
+      return;
+    }
+
+    startTransition(async () => {
+      const result = await deleteFn(id);
+      if (result.success) {
+        alert(`${type.charAt(0).toUpperCase() + type.slice(1)} deleted successfully.`);
+      } else {
+        alert(result.error || "Failed to delete item.");
+      }
+    });
+  };
+
+  const handleFormSubmit = async (formData: FormData, actionFn: (formData: FormData) => Promise<any>, type: string, isUpdate = false) => {
+    startTransition(async () => {
+      const result = await actionFn(formData);
+      if (result.success) {
+        alert(`${type} ${isUpdate ? "updated" : "created"} successfully.`);
+        if (isUpdate) setEditingItem(null);
+        // Clear form is handled by revalidation usually, but for client state we reset editing
+      } else {
+        alert(result.error || `Failed to ${isUpdate ? "update" : "create"} ${type}.`);
+      }
+    });
+  };
+
   return (
     <div className="flex flex-col lg:flex-row gap-8">
-      {/* Sidebar Navigation - Amazon Console Style */}
+      {/* Sidebar Navigation */}
       <aside className="lg:w-64 shrink-0">
         <nav className="flex flex-col bg-white border border-zinc-200 rounded-lg sticky top-20 overflow-hidden shadow-sm">
           <div className="px-5 py-4 bg-[#f2f3f3] text-xs font-bold uppercase tracking-widest text-zinc-500 border-b border-zinc-200">
@@ -60,7 +110,10 @@ export default function AdminContent({ data }: AdminContentProps) {
             {segments.map((segment) => (
               <button
                 key={segment.id}
-                onClick={() => setActiveSegment(segment.id as Section)}
+                onClick={() => {
+                  setActiveSegment(segment.id as Section);
+                  setEditingItem(null);
+                }}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded text-sm transition-all relative ${
                   activeSegment === segment.id
                     ? "bg-zinc-100 text-black font-bold"
@@ -87,7 +140,7 @@ export default function AdminContent({ data }: AdminContentProps) {
       <main className="flex-1 min-w-0">
         <AnimatePresence mode="wait">
           <motion.div
-            key={activeSegment}
+            key={`${activeSegment}-${editingItem?.id || 'new'}`}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -95,50 +148,62 @@ export default function AdminContent({ data }: AdminContentProps) {
           >
             {activeSegment === "projects" && (
               <SectionLayout
-                title="Projects"
+                title="Project"
                 count={data.projects.length}
-                form={<ProjectForm />}
-                list={<DataList data={data.projects} onDelete={deleteProject} type="project" />}
+                isEditing={!!editingItem}
+                onCancelEdit={cancelEdit}
+                form={<ProjectForm item={editingItem} onSubmit={(fd) => handleFormSubmit(fd, editingItem ? (formData) => updateProject(editingItem.id, formData) : createProject, "Project", !!editingItem)} isPending={isPending} />}
+                list={<DataList data={data.projects} onDelete={(id) => handleDelete(id, deleteProject, "project")} onEdit={handleEdit} type="project" />}
               />
             )}
             {activeSegment === "services" && (
               <SectionLayout
-                title="Services"
+                title="Service"
                 count={data.services.length}
-                form={<ServiceForm />}
-                list={<DataList data={data.services} onDelete={deleteService} type="service" />}
+                isEditing={!!editingItem}
+                onCancelEdit={cancelEdit}
+                form={<ServiceForm item={editingItem} onSubmit={(fd) => handleFormSubmit(fd, editingItem ? (formData) => updateService(editingItem.id, formData) : createService, "Service", !!editingItem)} isPending={isPending} />}
+                list={<DataList data={data.services} onDelete={(id) => handleDelete(id, deleteService, "service")} onEdit={handleEdit} type="service" />}
               />
             )}
             {activeSegment === "experience" && (
               <SectionLayout
                 title="Experience"
                 count={data.experiences.length}
-                form={<ExperienceForm />}
-                list={<DataList data={data.experiences} onDelete={deleteExperience} type="experience" />}
+                isEditing={!!editingItem}
+                onCancelEdit={cancelEdit}
+                form={<ExperienceForm item={editingItem} onSubmit={(fd) => handleFormSubmit(fd, editingItem ? (formData) => updateExperience(editingItem.id, formData) : createExperience, "Experience", !!editingItem)} isPending={isPending} />}
+                list={<DataList data={data.experiences} onDelete={(id) => handleDelete(id, deleteExperience, "experience")} onEdit={handleEdit} type="experience" />}
               />
             )}
             {activeSegment === "blog" && (
               <SectionLayout
-                title="Blog Posts"
+                title="Blog Post"
                 count={data.blogPosts.length}
-                form={<BlogForm />}
-                list={<DataList data={data.blogPosts} onDelete={deleteBlogPost} type="blog" />}
+                isEditing={!!editingItem}
+                onCancelEdit={cancelEdit}
+                form={<BlogForm item={editingItem} onSubmit={(fd) => handleFormSubmit(fd, editingItem ? (formData) => updateBlogPost(editingItem.id, formData) : createBlogPost, "Blog Post", !!editingItem)} isPending={isPending} />}
+                list={<DataList data={data.blogPosts} onDelete={(id) => handleDelete(id, deleteBlogPost, "blog post")} onEdit={handleEdit} type="blog" />}
               />
             )}
             {activeSegment === "certificates" && (
               <SectionLayout
-                title="Certificates"
+                title="Certificate"
                 count={data.certificates.length}
-                form={<CertificateForm />}
-                list={<DataList data={data.certificates} onDelete={deleteCertificate} type="certificate" />}
+                isEditing={!!editingItem}
+                onCancelEdit={cancelEdit}
+                form={<CertificateForm item={editingItem} onSubmit={(fd) => handleFormSubmit(fd, editingItem ? (formData) => updateCertificate(editingItem.id, formData) : createCertificate, "Certificate", !!editingItem)} isPending={isPending} />}
+                list={<DataList data={data.certificates} onDelete={(id) => handleDelete(id, deleteCertificate, "certificate")} onEdit={handleEdit} type="certificate" />}
               />
             )}
             {activeSegment === "skills" && (
               <SectionLayout
-                title="Skills"
+                title="Skill"
                 count={data.skills.length}
-                form={<SkillForm />}
-                list={<DataList data={data.skills} onDelete={deleteSkill} type="skill" />}
+                isEditing={!!editingItem}
+                onCancelEdit={cancelEdit}
+                form={<SkillForm item={editingItem} onSubmit={(fd) => handleFormSubmit(fd, editingItem ? (formData) => updateSkill(editingItem.id, formData) : createSkill, "Skill", !!editingItem)} isPending={isPending} />}
+                list={<DataList data={data.skills} onDelete={(id) => handleDelete(id, deleteSkill, "skill")} onEdit={handleEdit} type="skill" />}
               />
             )}
           </motion.div>
@@ -148,14 +213,36 @@ export default function AdminContent({ data }: AdminContentProps) {
   );
 }
 
-function SectionLayout({ title, count, form, list }: { title: string; count: number; form: React.ReactNode; list: React.ReactNode }) {
+function SectionLayout({ 
+  title, 
+  count, 
+  form, 
+  list, 
+  isEditing, 
+  onCancelEdit 
+}: { 
+  title: string; 
+  count: number; 
+  form: React.ReactNode; 
+  list: React.ReactNode;
+  isEditing?: boolean;
+  onCancelEdit?: () => void;
+}) {
   return (
     <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 lg:items-start">
       <div className="lg:col-span-12 xl:col-span-5 order-2 xl:order-1">
         <div className="bg-white border border-zinc-200 rounded-lg shadow-sm">
           <div className="px-6 py-4 border-b border-zinc-200 bg-zinc-50 flex items-center justify-between">
-            <h2 className="text-base font-bold text-zinc-900">Add New {title}</h2>
-            <Plus className="w-4 h-4 text-zinc-400" />
+            <h2 className="text-base font-bold text-zinc-900">
+              {isEditing ? `Edit ${title}` : `Add New ${title}`}
+            </h2>
+            {isEditing ? (
+              <button onClick={onCancelEdit} className="text-zinc-400 hover:text-zinc-600">
+                <X className="w-4 h-4" />
+              </button>
+            ) : (
+              <Plus className="w-4 h-4 text-zinc-400" />
+            )}
           </div>
           <div className="p-6">
             {form}
@@ -166,7 +253,7 @@ function SectionLayout({ title, count, form, list }: { title: string; count: num
         <div className="bg-white border border-zinc-200 rounded-lg shadow-sm overflow-hidden">
           <div className="px-6 py-4 border-b border-zinc-200 bg-zinc-50 flex items-center justify-between">
              <h2 className="text-sm font-bold text-zinc-500 uppercase tracking-wider">
-               Active {title} <span className="ml-2 font-normal text-zinc-400">({count})</span>
+               Active {title}s <span className="ml-2 font-normal text-zinc-400">({count})</span>
              </h2>
           </div>
           <div className="min-h-[200px]">
@@ -178,14 +265,24 @@ function SectionLayout({ title, count, form, list }: { title: string; count: num
   );
 }
 
-function DataList({ data, onDelete, type }: { data: any[]; onDelete: (id: string) => Promise<void>; type: string }) {
+function DataList({ 
+  data, 
+  onDelete, 
+  onEdit,
+  type 
+}: { 
+  data: any[]; 
+  onDelete: (id: string) => void; 
+  onEdit: (item: any) => void;
+  type: string 
+}) {
   if (data.length === 0) {
     return (
       <div className="p-12 text-center">
         <div className="w-12 h-12 bg-zinc-50 rounded-full flex items-center justify-center mx-auto mb-3 border border-zinc-100">
            <List className="w-5 h-5 text-zinc-300" />
         </div>
-        <p className="text-zinc-400 text-sm font-medium">No records found. Fill out the form to add one.</p>
+        <p className="text-zinc-400 text-sm font-medium">No records found.</p>
       </div>
     );
   }
@@ -207,14 +304,23 @@ function DataList({ data, onDelete, type }: { data: any[]; onDelete: (id: string
               </div>
             </div>
             <p className="text-zinc-500 text-xs truncate max-w-md">
-              {item.description || item.excerpt || item.skillsList || item.issuer || item.problem}
+              {item.description || item.excerpt || item.skillsList || item.issuer || item.problem || item.solution}
             </p>
           </div>
-          <form action={async () => { if(confirm('Are you sure you want to delete this resource?')) await onDelete(item.id); }}>
-            <button className="h-8 w-8 flex items-center justify-center text-zinc-300 hover:text-red-600 hover:bg-red-50 rounded transition-all">
+          <div className="flex items-center gap-2">
+            <button 
+              onClick={() => onEdit(item)}
+              className="h-8 w-8 flex items-center justify-center text-zinc-300 hover:text-blue-600 hover:bg-blue-50 rounded transition-all"
+            >
+              <Pencil className="w-4 h-4" />
+            </button>
+            <button 
+              onClick={() => onDelete(item.id)}
+              className="h-8 w-8 flex items-center justify-center text-zinc-300 hover:text-red-600 hover:bg-red-50 rounded transition-all"
+            >
               <Trash2 className="w-4 h-4" />
             </button>
-          </form>
+          </div>
         </div>
       ))}
     </div>
@@ -222,154 +328,166 @@ function DataList({ data, onDelete, type }: { data: any[]; onDelete: (id: string
 }
 
 // Form Components
-function ProjectForm() {
+function ProjectForm({ item, onSubmit, isPending }: { item: any; onSubmit: (fd: FormData) => void; isPending: boolean }) {
   return (
-    <form action={createProject} className="space-y-4">
+    <form action={onSubmit} className="space-y-4">
       <div className="space-y-1.5">
         <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Project Title</label>
-        <input name="title" required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="E-Commerce Scaling" />
+        <input name="title" defaultValue={item?.title} required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="E-Commerce Scaling" />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Client</label>
-          <input name="client" className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Nike" />
+          <input name="client" defaultValue={item?.client} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Nike" />
         </div>
         <div className="space-y-1.5">
           <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Tags</label>
-          <input name="tags" className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="SEO, Meta" />
+          <input name="tags" defaultValue={item?.tags} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="SEO, Meta" />
         </div>
       </div>
       <div className="space-y-1.5">
         <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Problem Statement</label>
-        <textarea name="problem" className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300 min-h-[60px]" placeholder="The challenge..." />
+        <textarea name="problem" defaultValue={item?.problem} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300 min-h-[60px]" placeholder="The challenge..." />
       </div>
       <div className="space-y-1.5">
         <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Strategy & Solution</label>
-        <textarea name="strategy" className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300 min-h-[60px]" placeholder="The approach..." />
+        <textarea name="strategy" defaultValue={item?.strategy} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300 min-h-[60px]" placeholder="The approach..." />
       </div>
-      <button className="w-full bg-[#0073BB] text-white font-bold py-2.5 rounded-md hover:bg-[#005c96] transition-all shadow-sm active:translate-y-[1px]">Create Case Study</button>
+      <button disabled={isPending} className="w-full bg-[#0073BB] text-white font-bold py-2.5 rounded-md hover:bg-[#005c96] transition-all shadow-sm active:translate-y-[1px] disabled:opacity-50">
+        {isPending ? "Processing..." : item ? "Update Project" : "Create Project"}
+      </button>
     </form>
   );
 }
 
-function ServiceForm() {
+function ServiceForm({ item, onSubmit, isPending }: { item: any; onSubmit: (fd: FormData) => void; isPending: boolean }) {
   return (
-    <form action={createService} className="space-y-4">
+    <form action={onSubmit} className="space-y-4">
       <div className="space-y-1.5">
         <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Service Name</label>
-        <input name="title" required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Ads Management" />
+        <input name="title" defaultValue={item?.title} required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Ads Management" />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Icon ID</label>
-          <input name="icon" required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="target" />
+          <input name="icon" defaultValue={item?.icon} required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="target" />
         </div>
         <div className="space-y-1.5">
           <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Official Link</label>
-          <input name="link" className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="https://..." />
+          <input name="link" defaultValue={item?.link} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="https://..." />
         </div>
       </div>
       <div className="space-y-1.5">
         <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Problem</label>
-        <textarea name="problem" className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300 min-h-[60px]" placeholder="Problem..." />
+        <textarea name="problem" defaultValue={item?.problem} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300 min-h-[60px]" placeholder="Problem..." />
       </div>
       <div className="space-y-1.5">
         <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Solution</label>
-        <textarea name="solution" className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300 min-h-[60px]" placeholder="Solution..." />
+        <textarea name="solution" defaultValue={item?.solution} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300 min-h-[60px]" placeholder="Solution..." />
       </div>
-      <button className="w-full bg-[#0073BB] text-white font-bold py-2.5 rounded-md hover:bg-[#005c96] transition-all shadow-sm active:translate-y-[1px]">Register Service</button>
+      <button disabled={isPending} className="w-full bg-[#0073BB] text-white font-bold py-2.5 rounded-md hover:bg-[#005c96] transition-all shadow-sm active:translate-y-[1px] disabled:opacity-50">
+        {isPending ? "Processing..." : item ? "Update Service" : "Register Service"}
+      </button>
     </form>
   );
 }
 
-function ExperienceForm() {
+function ExperienceForm({ item, onSubmit, isPending }: { item: any; onSubmit: (fd: FormData) => void; isPending: boolean }) {
   return (
-    <form action={createExperience} className="space-y-4">
+    <form action={onSubmit} className="space-y-4">
       <div className="space-y-1.5">
         <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Professional Role</label>
-        <input name="role" required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Marketing Lead" />
+        <input name="role" defaultValue={item?.role} required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Marketing Lead" />
       </div>
       <div className="space-y-1.5">
         <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Organization</label>
-        <input name="company" required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Company Name" />
+        <input name="company" defaultValue={item?.company} required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Company Name" />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Time Period</label>
-          <input name="period" className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="2023 - Present" />
+          <input name="period" defaultValue={item?.period} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="2023 - Present" />
         </div>
         <div className="space-y-1.5">
           <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Location</label>
-          <input name="location" className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Remote / Mumbai" />
+          <input name="location" defaultValue={item?.location} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Remote / Mumbai" />
         </div>
       </div>
       <div className="space-y-1.5">
         <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Achievements</label>
-        <textarea name="description" className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300 min-h-[100px]" placeholder="Key impact..." />
+        <textarea name="description" defaultValue={item?.description} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300 min-h-[100px]" placeholder="Key impact..." />
       </div>
-      <button className="w-full bg-[#0073BB] text-white font-bold py-2.5 rounded-md hover:bg-[#005c96] transition-all shadow-sm active:translate-y-[1px]">Commit Experience</button>
+      <button disabled={isPending} className="w-full bg-[#0073BB] text-white font-bold py-2.5 rounded-md hover:bg-[#005c96] transition-all shadow-sm active:translate-y-[1px] disabled:opacity-50">
+        {isPending ? "Processing..." : item ? "Update Experience" : "Commit Experience"}
+      </button>
     </form>
   );
 }
 
-function BlogForm() {
+function BlogForm({ item, onSubmit, isPending }: { item: any; onSubmit: (fd: FormData) => void; isPending: boolean }) {
   return (
-    <form action={createBlogPost} className="space-y-4">
+    <form action={onSubmit} className="space-y-4">
       <div className="space-y-1.5">
         <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Post Title</label>
-        <input name="title" required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Scaling Performance" />
+        <input name="title" defaultValue={item?.title} required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Scaling Performance" />
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Slug</label>
-          <input name="slug" required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="url-slug" />
+          <input name="slug" defaultValue={item?.slug} required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="url-slug" />
         </div>
         <div className="space-y-1.5">
           <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Category</label>
-          <input name="category" className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Growth" />
+          <input name="category" defaultValue={item?.category} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Growth" />
         </div>
       </div>
       <div className="space-y-1.5">
         <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Markdown Content</label>
-        <textarea name="content" className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300 min-h-[120px]" placeholder="Write content..." />
+        <textarea name="content" defaultValue={item?.content} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300 min-h-[120px]" placeholder="Write content..." />
       </div>
-      <button className="w-full bg-[#0073BB] text-white font-bold py-2.5 rounded-md hover:bg-[#005c96] transition-all shadow-sm active:translate-y-[1px]">Deploy Article</button>
+      <button disabled={isPending} className="w-full bg-[#0073BB] text-white font-bold py-2.5 rounded-md hover:bg-[#005c96] transition-all shadow-sm active:translate-y-[1px] disabled:opacity-50">
+        {isPending ? "Processing..." : item ? "Update Post" : "Deploy Article"}
+      </button>
     </form>
   );
 }
 
-function CertificateForm() {
+function CertificateForm({ item, onSubmit, isPending }: { item: any; onSubmit: (fd: FormData) => void; isPending: boolean }) {
   return (
-    <form action={createCertificate} className="space-y-4">
+    <form action={onSubmit} className="space-y-4">
       <div className="space-y-1.5">
         <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Certificate Name</label>
-        <input name="title" required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Google Ads Cert" />
+        <input name="title" defaultValue={item?.title} required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Google Ads Cert" />
       </div>
       <div className="space-y-1.5">
         <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Issuing Entity</label>
-        <input name="issuer" required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Meta / Google" />
+        <input name="issuer" defaultValue={item?.issuer} required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Meta / Google" />
       </div>
       <div className="space-y-1.5">
         <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Icon Type</label>
-        <input name="icon" className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="award / shield" />
+        <input name="icon" defaultValue={item?.icon} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="award / shield" />
       </div>
-      <button className="w-full bg-[#0073BB] text-white font-bold py-2.5 rounded-md hover:bg-[#005c96] transition-all shadow-sm active:translate-y-[1px]">Validate Credential</button>
+      <button disabled={isPending} className="w-full bg-[#0073BB] text-white font-bold py-2.5 rounded-md hover:bg-[#005c96] transition-all shadow-sm active:translate-y-[1px] disabled:opacity-50">
+        {isPending ? "Processing..." : item ? "Update Certificate" : "Validate Credential"}
+      </button>
     </form>
   );
 }
 
-function SkillForm() {
+function SkillForm({ item, onSubmit, isPending }: { item: any; onSubmit: (fd: FormData) => void; isPending: boolean }) {
   return (
-    <form action={createSkill} className="space-y-4">
+    <form action={onSubmit} className="space-y-4">
       <div className="space-y-1.5">
         <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Skill Category</label>
-        <input name="category" required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Paid Advertising" />
+        <input name="category" defaultValue={item?.category} required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Paid Advertising" />
       </div>
       <div className="space-y-1.5">
         <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Comma-Separated Skills</label>
-        <textarea name="skillsList" required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300 min-h-[80px]" placeholder="SEO, PPC, Ads..." />
+        <textarea name="skillsList" defaultValue={item?.skillsList} required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300 min-h-[80px]" placeholder="SEO, PPC, Ads..." />
       </div>
-      <button className="w-full bg-[#0073BB] text-white font-bold py-2.5 rounded-md hover:bg-[#005c96] transition-all shadow-sm active:translate-y-[1px]">Sync Skill Set</button>
+      <button disabled={isPending} className="w-full bg-[#0073BB] text-white font-bold py-2.5 rounded-md hover:bg-[#005c96] transition-all shadow-sm active:translate-y-[1px] disabled:opacity-50">
+        {isPending ? "Processing..." : item ? "Update Skill" : "Sync Skill Set"}
+      </button>
     </form>
   );
 }

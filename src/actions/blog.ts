@@ -7,73 +7,99 @@ import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
 
 const schema = z.object({
-  title: z.string().min(1),
-  slug: z.string().min(1),
-  date: z.string().optional(),
-  category: z.string().optional(),
-  excerpt: z.string().optional(),
-  content: z.string().optional(),
+  title: z.string().min(1, "Title is required"),
+  slug: z.string().min(1, "Slug is required"),
+  date: z.string().nullable().optional(),
+  category: z.string().nullable().optional(),
+  excerpt: z.string().nullable().optional(),
+  content: z.string().nullable().optional(),
 });
 
 export async function createBlogPost(formData: FormData) {
-  const parsed = schema.safeParse({
-    title: formData.get("title"),
-    slug: formData.get("slug"),
-    date: formData.get("date"),
-    category: formData.get("category"),
-    excerpt: formData.get("excerpt"),
-    content: formData.get("content"),
-  });
+  try {
+    const rawData = {
+      title: formData.get("title"),
+      slug: formData.get("slug"),
+      date: formData.get("date"),
+      category: formData.get("category"),
+      excerpt: formData.get("excerpt"),
+      content: formData.get("content"),
+    };
 
-  if (!parsed.success) throw new Error("Invalid input");
+    const parsed = schema.safeParse(rawData);
 
-  await db.insert(blogPosts).values({
-    id: crypto.randomUUID(),
-    title: parsed.data.title,
-    slug: parsed.data.slug,
-    date: parsed.data.date,
-    category: parsed.data.category,
-    excerpt: parsed.data.excerpt,
-    content: parsed.data.content,
-  });
+    if (!parsed.success) {
+      return { success: false, error: parsed.error.errors[0].message };
+    }
 
-  revalidatePath("/admin");
-  revalidatePath("/blog");
-  revalidatePath("/");
+    await db.insert(blogPosts).values({
+      id: crypto.randomUUID(),
+      title: parsed.data.title,
+      slug: parsed.data.slug,
+      date: parsed.data.date || null,
+      category: parsed.data.category || null,
+      excerpt: parsed.data.excerpt || null,
+      content: parsed.data.content || null,
+    });
+
+    revalidatePath("/admin");
+    revalidatePath("/blog");
+    revalidatePath("/");
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: "Failed to deploy article" };
+  }
 }
 
 export async function deleteBlogPost(id: string) {
-  await db.delete(blogPosts).where(eq(blogPosts.id, id));
-  revalidatePath("/admin");
-  revalidatePath("/blog");
-  revalidatePath("/");
+  try {
+    await db.delete(blogPosts).where(eq(blogPosts.id, id));
+    revalidatePath("/admin");
+    revalidatePath("/blog");
+    revalidatePath("/");
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: "Failed to delete article" };
+  }
 }
 
 export async function updateBlogPost(id: string, formData: FormData) {
-  const parsed = schema.safeParse({
-    title: formData.get("title"),
-    slug: formData.get("slug"),
-    date: formData.get("date"),
-    category: formData.get("category"),
-    excerpt: formData.get("excerpt"),
-    content: formData.get("content"),
-  });
+  try {
+    const rawData = {
+      title: formData.get("title"),
+      slug: formData.get("slug"),
+      date: formData.get("date"),
+      category: formData.get("category"),
+      excerpt: formData.get("excerpt"),
+      content: formData.get("content"),
+    };
 
-  if (!parsed.success) throw new Error("Invalid input");
+    const parsed = schema.safeParse(rawData);
 
-  await db
-    .update(blogPosts)
-    .set({
-      title: parsed.data.title,
-      slug: parsed.data.slug,
-      date: parsed.data.date,
-      category: parsed.data.category,
-      excerpt: parsed.data.excerpt,
-      content: parsed.data.content,
-    })
-    .where(eq(blogPosts.id, id));
+    if (!parsed.success) {
+      return { success: false, error: parsed.error.errors[0].message };
+    }
 
-  revalidatePath("/admin");
-  revalidatePath("/blog");
-  revalidatePath("/");
+    await db
+      .update(blogPosts)
+      .set({
+        title: parsed.data.title,
+        slug: parsed.data.slug,
+        date: parsed.data.date || null,
+        category: parsed.data.category || null,
+        excerpt: parsed.data.excerpt || null,
+        content: parsed.data.content || null,
+      })
+      .where(eq(blogPosts.id, id));
+
+    revalidatePath("/admin");
+    revalidatePath("/blog");
+    revalidatePath("/");
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: "Failed to update article" };
+  }
 }

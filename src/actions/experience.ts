@@ -7,65 +7,91 @@ import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
 
 const schema = z.object({
-  role: z.string().min(1),
-  company: z.string().min(1),
-  period: z.string().optional(),
-  location: z.string().optional(),
-  description: z.string().optional(),
+  role: z.string().min(1, "Role is required"),
+  company: z.string().min(1, "Organization is required"),
+  period: z.string().nullable().optional(),
+  location: z.string().nullable().optional(),
+  description: z.string().nullable().optional(),
 });
 
 export async function createExperience(formData: FormData) {
-  const parsed = schema.safeParse({
-    role: formData.get("role"),
-    company: formData.get("company"),
-    period: formData.get("period"),
-    location: formData.get("location"),
-    description: formData.get("description"),
-  });
+  try {
+    const rawData = {
+      role: formData.get("role"),
+      company: formData.get("company"),
+      period: formData.get("period"),
+      location: formData.get("location"),
+      description: formData.get("description"),
+    };
 
-  if (!parsed.success) throw new Error("Invalid input");
+    const parsed = schema.safeParse(rawData);
 
-  await db.insert(experiences).values({
-    id: crypto.randomUUID(),
-    role: parsed.data.role,
-    company: parsed.data.company,
-    period: parsed.data.period,
-    location: parsed.data.location,
-    description: parsed.data.description,
-  });
+    if (!parsed.success) {
+      return { success: false, error: parsed.error.errors[0].message };
+    }
 
-  revalidatePath("/admin");
-  revalidatePath("/");
+    await db.insert(experiences).values({
+      id: crypto.randomUUID(),
+      role: parsed.data.role,
+      company: parsed.data.company,
+      period: parsed.data.period || null,
+      location: parsed.data.location || null,
+      description: parsed.data.description || null,
+    });
+
+    revalidatePath("/admin");
+    revalidatePath("/");
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: "Failed to commit experience" };
+  }
 }
 
 export async function deleteExperience(id: string) {
-  await db.delete(experiences).where(eq(experiences.id, id));
-  revalidatePath("/admin");
-  revalidatePath("/");
+  try {
+    await db.delete(experiences).where(eq(experiences.id, id));
+    revalidatePath("/admin");
+    revalidatePath("/");
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: "Failed to delete experience" };
+  }
 }
 
 export async function updateExperience(id: string, formData: FormData) {
-  const parsed = schema.safeParse({
-    role: formData.get("role"),
-    company: formData.get("company"),
-    period: formData.get("period"),
-    location: formData.get("location"),
-    description: formData.get("description"),
-  });
+  try {
+    const rawData = {
+      role: formData.get("role"),
+      company: formData.get("company"),
+      period: formData.get("period"),
+      location: formData.get("location"),
+      description: formData.get("description"),
+    };
 
-  if (!parsed.success) throw new Error("Invalid input");
+    const parsed = schema.safeParse(rawData);
 
-  await db
-    .update(experiences)
-    .set({
-      role: parsed.data.role,
-      company: parsed.data.company,
-      period: parsed.data.period,
-      location: parsed.data.location,
-      description: parsed.data.description,
-    })
-    .where(eq(experiences.id, id));
+    if (!parsed.success) {
+      return { success: false, error: parsed.error.errors[0].message };
+    }
 
-  revalidatePath("/admin");
-  revalidatePath("/");
+    await db
+      .update(experiences)
+      .set({
+        role: parsed.data.role,
+        company: parsed.data.company,
+        period: parsed.data.period || null,
+        location: parsed.data.location || null,
+        description: parsed.data.description || null,
+      })
+      .where(eq(experiences.id, id));
+
+    revalidatePath("/admin");
+    revalidatePath("/");
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: "Failed to update experience" };
+  }
 }

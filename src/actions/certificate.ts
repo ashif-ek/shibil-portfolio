@@ -7,65 +7,91 @@ import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
 
 const schema = z.object({
-  title: z.string().min(1),
-  issuer: z.string().min(1),
-  date: z.string().optional(),
-  link: z.string().optional(),
-  icon: z.string().optional(),
+  title: z.string().min(1, "Name is required"),
+  issuer: z.string().min(1, "Issuer is required"),
+  date: z.string().nullable().optional(),
+  link: z.string().nullable().optional(),
+  icon: z.string().nullable().optional(),
 });
 
 export async function createCertificate(formData: FormData) {
-  const parsed = schema.safeParse({
-    title: formData.get("title"),
-    issuer: formData.get("issuer"),
-    date: formData.get("date"),
-    link: formData.get("link"),
-    icon: formData.get("icon"),
-  });
+  try {
+    const rawData = {
+      title: formData.get("title"),
+      issuer: formData.get("issuer"),
+      date: formData.get("date"),
+      link: formData.get("link"),
+      icon: formData.get("icon"),
+    };
 
-  if (!parsed.success) throw new Error("Invalid input");
+    const parsed = schema.safeParse(rawData);
 
-  await db.insert(certificates).values({
-    id: crypto.randomUUID(),
-    title: parsed.data.title,
-    issuer: parsed.data.issuer,
-    date: parsed.data.date,
-    link: parsed.data.link,
-    icon: parsed.data.icon,
-  });
+    if (!parsed.success) {
+      return { success: false, error: parsed.error.errors[0].message };
+    }
 
-  revalidatePath("/admin");
-  revalidatePath("/");
+    await db.insert(certificates).values({
+      id: crypto.randomUUID(),
+      title: parsed.data.title,
+      issuer: parsed.data.issuer,
+      date: parsed.data.date || null,
+      link: parsed.data.link || null,
+      icon: parsed.data.icon || null,
+    });
+
+    revalidatePath("/admin");
+    revalidatePath("/");
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: "Failed to validate credential" };
+  }
 }
 
 export async function deleteCertificate(id: string) {
-  await db.delete(certificates).where(eq(certificates.id, id));
-  revalidatePath("/admin");
-  revalidatePath("/");
+  try {
+    await db.delete(certificates).where(eq(certificates.id, id));
+    revalidatePath("/admin");
+    revalidatePath("/");
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: "Failed to delete certificate" };
+  }
 }
 
 export async function updateCertificate(id: string, formData: FormData) {
-  const parsed = schema.safeParse({
-    title: formData.get("title"),
-    issuer: formData.get("issuer"),
-    date: formData.get("date"),
-    link: formData.get("link"),
-    icon: formData.get("icon"),
-  });
+  try {
+    const rawData = {
+      title: formData.get("title"),
+      issuer: formData.get("issuer"),
+      date: formData.get("date"),
+      link: formData.get("link"),
+      icon: formData.get("icon"),
+    };
 
-  if (!parsed.success) throw new Error("Invalid input");
+    const parsed = schema.safeParse(rawData);
 
-  await db
-    .update(certificates)
-    .set({
-      title: parsed.data.title,
-      issuer: parsed.data.issuer,
-      date: parsed.data.date,
-      link: parsed.data.link,
-      icon: parsed.data.icon,
-    })
-    .where(eq(certificates.id, id));
+    if (!parsed.success) {
+      return { success: false, error: parsed.error.errors[0].message };
+    }
 
-  revalidatePath("/admin");
-  revalidatePath("/");
+    await db
+      .update(certificates)
+      .set({
+        title: parsed.data.title,
+        issuer: parsed.data.issuer,
+        date: parsed.data.date || null,
+        link: parsed.data.link || null,
+        icon: parsed.data.icon || null,
+      })
+      .where(eq(certificates.id, id));
+
+    revalidatePath("/admin");
+    revalidatePath("/");
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: "Failed to update certificate" };
+  }
 }

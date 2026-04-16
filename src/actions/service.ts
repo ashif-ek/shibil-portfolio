@@ -7,70 +7,96 @@ import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
 
 const schema = z.object({
-  title: z.string().min(1),
-  icon: z.string().min(1),
-  problem: z.string().optional(),
-  solution: z.string().optional(),
-  outcome: z.string().optional(),
-  link: z.string().optional(),
+  title: z.string().min(1, "Service name is required"),
+  icon: z.string().min(1, "Icon ID is required"),
+  problem: z.string().nullable().optional(),
+  solution: z.string().nullable().optional(),
+  outcome: z.string().nullable().optional(),
+  link: z.string().nullable().optional(),
 });
 
 export async function createService(formData: FormData) {
-  const parsed = schema.safeParse({
-    title: formData.get("title"),
-    icon: formData.get("icon"),
-    problem: formData.get("problem"),
-    solution: formData.get("solution"),
-    outcome: formData.get("outcome"),
-    link: formData.get("link"),
-  });
+  try {
+    const rawData = {
+      title: formData.get("title"),
+      icon: formData.get("icon"),
+      problem: formData.get("problem"),
+      solution: formData.get("solution"),
+      outcome: formData.get("outcome"),
+      link: formData.get("link"),
+    };
 
-  if (!parsed.success) throw new Error("Invalid input");
+    const parsed = schema.safeParse(rawData);
 
-  await db.insert(services).values({
-    id: crypto.randomUUID(),
-    title: parsed.data.title,
-    icon: parsed.data.icon,
-    problem: parsed.data.problem,
-    solution: parsed.data.solution,
-    outcome: parsed.data.outcome,
-    link: parsed.data.link,
-  });
+    if (!parsed.success) {
+      return { success: false, error: parsed.error.errors[0].message };
+    }
 
-  revalidatePath("/admin");
-  revalidatePath("/");
+    await db.insert(services).values({
+      id: crypto.randomUUID(),
+      title: parsed.data.title,
+      icon: parsed.data.icon,
+      problem: parsed.data.problem || null,
+      solution: parsed.data.solution || null,
+      outcome: parsed.data.outcome || null,
+      link: parsed.data.link || null,
+    });
+
+    revalidatePath("/admin");
+    revalidatePath("/");
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: "Failed to register service" };
+  }
 }
 
 export async function deleteService(id: string) {
-  await db.delete(services).where(eq(services.id, id));
-  revalidatePath("/admin");
-  revalidatePath("/");
+  try {
+    await db.delete(services).where(eq(services.id, id));
+    revalidatePath("/admin");
+    revalidatePath("/");
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: "Failed to delete service" };
+  }
 }
 
 export async function updateService(id: string, formData: FormData) {
-  const parsed = schema.safeParse({
-    title: formData.get("title"),
-    icon: formData.get("icon"),
-    problem: formData.get("problem"),
-    solution: formData.get("solution"),
-    outcome: formData.get("outcome"),
-    link: formData.get("link"),
-  });
+  try {
+    const rawData = {
+      title: formData.get("title"),
+      icon: formData.get("icon"),
+      problem: formData.get("problem"),
+      solution: formData.get("solution"),
+      outcome: formData.get("outcome"),
+      link: formData.get("link"),
+    };
 
-  if (!parsed.success) throw new Error("Invalid input");
+    const parsed = schema.safeParse(rawData);
 
-  await db
-    .update(services)
-    .set({
-      title: parsed.data.title,
-      icon: parsed.data.icon,
-      problem: parsed.data.problem,
-      solution: parsed.data.solution,
-      outcome: parsed.data.outcome,
-      link: parsed.data.link,
-    })
-    .where(eq(services.id, id));
+    if (!parsed.success) {
+      return { success: false, error: parsed.error.errors[0].message };
+    }
 
-  revalidatePath("/admin");
-  revalidatePath("/");
+    await db
+      .update(services)
+      .set({
+        title: parsed.data.title,
+        icon: parsed.data.icon,
+        problem: parsed.data.problem || null,
+        solution: parsed.data.solution || null,
+        outcome: parsed.data.outcome || null,
+        link: parsed.data.link || null,
+      })
+      .where(eq(services.id, id));
+
+    revalidatePath("/admin");
+    revalidatePath("/");
+    return { success: true };
+  } catch (err) {
+    console.error(err);
+    return { success: false, error: "Failed to update service" };
+  }
 }
