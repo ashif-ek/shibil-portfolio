@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { MoonStar, SunDim } from "lucide-react";
+import MoonStar from "lucide-react/dist/esm/icons/moon-star";
+import SunDim from "lucide-react/dist/esm/icons/sun-dim";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 

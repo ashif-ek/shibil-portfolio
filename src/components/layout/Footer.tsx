@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { Share2, Globe, Camera, Mail, MapPin, Phone } from "lucide-react";
+import Share2 from "lucide-react/dist/esm/icons/share-2";
+import Globe from "lucide-react/dist/esm/icons/globe";
+import Camera from "lucide-react/dist/esm/icons/camera";
+import Mail from "lucide-react/dist/esm/icons/mail";
+import MapPin from "lucide-react/dist/esm/icons/map-pin";
+import Phone from "lucide-react/dist/esm/icons/phone";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();

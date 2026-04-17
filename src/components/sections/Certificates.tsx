@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Award, ExternalLink, ShieldCheck, GraduationCap, LucideIcon } from "lucide-react";
+import { LucideIcon, ExternalLink, Award, ShieldCheck, GraduationCap, Search } from "lucide-react";
 
 const ICON_MAP: Record<string, LucideIcon> = {
   award: Award,

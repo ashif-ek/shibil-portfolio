@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronUp } from "lucide-react";
+import ChevronUp from "lucide-react/dist/esm/icons/chevron-up";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function BackToTop() {

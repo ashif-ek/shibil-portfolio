@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { UserCog } from "lucide-react";
+import UserCog from "lucide-react/dist/esm/icons/user-cog";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
 
 export default function Navbar() {

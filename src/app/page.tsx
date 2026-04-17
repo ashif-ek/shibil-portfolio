@@ -6,6 +6,7 @@ import { seed } from "@/lib/seed";
 import { desc } from "drizzle-orm";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
+import InViewSection from "@/components/common/InViewSection";
 import { 
   ServiceSkeleton, 
   ProjectSkeleton, 
@@ -15,13 +16,13 @@ import {
   SkillsSkeleton 
 } from "@/components/sections/SectionSkeletons";
 
-const Services = dynamic(() => import("@/components/sections/Services"));
-const CaseStudies = dynamic(() => import("@/components/sections/CaseStudies"));
-const Experience = dynamic(() => import("@/components/sections/Experience"));
-const Certificates = dynamic(() => import("@/components/sections/Certificates"));
-const RecentBlogPosts = dynamic(() => import("@/components/sections/RecentBlogPosts"));
-const Skills = dynamic(() => import("@/components/sections/Skills"));
-const Contact = dynamic(() => import("@/components/sections/Contact"));
+const Services = dynamic(() => import("@/components/sections/Services"), { ssr: false });
+const CaseStudies = dynamic(() => import("@/components/sections/CaseStudies"), { ssr: false });
+const Experience = dynamic(() => import("@/components/sections/Experience"), { ssr: false });
+const Certificates = dynamic(() => import("@/components/sections/Certificates"), { ssr: false });
+const RecentBlogPosts = dynamic(() => import("@/components/sections/RecentBlogPosts"), { ssr: false });
+const Skills = dynamic(() => import("@/components/sections/Skills"), { ssr: false });
+const Contact = dynamic(() => import("@/components/sections/Contact"), { ssr: false });
 
 async function ServicesSection() {
   const data = await db.select().from(services).orderBy(desc(services.createdAt));
@@ -62,31 +63,45 @@ export default async function Home() {
       <Hero />
       <About />
       
-      <Suspense fallback={<ServiceSkeleton />}>
-        <ServicesSection />
-      </Suspense>
+      <InViewSection fallback={<ServiceSkeleton />}>
+        <Suspense fallback={<ServiceSkeleton />}>
+          <ServicesSection />
+        </Suspense>
+      </InViewSection>
 
-      <Suspense fallback={<ProjectSkeleton />}>
-        <CaseStudiesSection />
-      </Suspense>
+      <InViewSection fallback={<ProjectSkeleton />}>
+        <Suspense fallback={<ProjectSkeleton />}>
+          <CaseStudiesSection />
+        </Suspense>
+      </InViewSection>
 
-      <Suspense fallback={<CertificateSkeleton />}>
-        <CertificatesSection />
-      </Suspense>
+      <InViewSection fallback={<CertificateSkeleton />}>
+        <Suspense fallback={<CertificateSkeleton />}>
+          <CertificatesSection />
+        </Suspense>
+      </InViewSection>
 
-      <Suspense fallback={<ExperienceSkeleton />}>
-        <ExperienceSection />
-      </Suspense>
+      <InViewSection fallback={<ExperienceSkeleton />}>
+        <Suspense fallback={<ExperienceSkeleton />}>
+          <ExperienceSection />
+        </Suspense>
+      </InViewSection>
 
-      <Suspense fallback={<BlogSkeleton />}>
-        <BlogSection />
-      </Suspense>
+      <InViewSection fallback={<BlogSkeleton />}>
+        <Suspense fallback={<BlogSkeleton />}>
+          <BlogSection />
+        </Suspense>
+      </InViewSection>
 
-      <Suspense fallback={<SkillsSkeleton />}>
-        <SkillsSection />
-      </Suspense>
+      <InViewSection fallback={<SkillsSkeleton />}>
+        <Suspense fallback={<SkillsSkeleton />}>
+          <SkillsSection />
+        </Suspense>
+      </InViewSection>
 
-      <Contact />
+      <InViewSection fallback={<div className="h-96" />}>
+        <Contact />
+      </InViewSection>
     </main>
   );
 }

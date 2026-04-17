@@ -10,7 +10,6 @@ import {
   ShoppingBag,
   Phone,
   Download,
-  MessageCircleMore,
 } from "lucide-react";
 
 export default function Hero() {
