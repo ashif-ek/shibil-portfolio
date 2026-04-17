@@ -64,6 +64,7 @@
   background-size: 100% 100%;
   animation: luxury-shimmer 2s linear infinite;
   will-change: transform;
+  transform: translateZ(0); /* Force GPU layer */
 }
 
 @layer base {
@@ -123,7 +124,6 @@
       min-height: 100vh;
       scroll-behavior: smooth;
       font-family: var(--font-inter), sans-serif;
-      transition: background-color 0.3s ease, color 0.3s ease;
     }
   }
 

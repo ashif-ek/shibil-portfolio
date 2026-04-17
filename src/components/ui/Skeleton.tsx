@@ -6,7 +6,7 @@ export function Skeleton({ className, ...props }: SkeletonProps) {
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-lg bg-muted border border-border/50 animate-luxury-pulse",
+        "relative overflow-hidden rounded-lg bg-muted border border-border/50 animate-luxury-pulse transform-gpu will-change-[opacity]",
         "before:absolute before:inset-0 before:z-10 before:animate-shimmer before:content-['']",
         className
       )}

@@ -8,8 +8,8 @@ export default function WhatsAppButton() {
 
   return (
     <div className="fixed bottom-8 right-8 z-[9999]">
-      {/* Ripple Animation */}
-      <div className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-20" />
+      {/* Ripple Animation - GPU Promoted */}
+      <div className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-20 transform-gpu will-change-transform" />
       
       <motion.a
         href={whatsappUrl}

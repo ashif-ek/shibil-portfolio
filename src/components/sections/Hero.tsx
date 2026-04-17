@@ -23,7 +23,8 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="transform-gpu"
         >
           <span className="inline-block py-1 px-3 rounded-full bg-blue-500/10 text-blue-600 dark:text-blue-400 text-sm font-medium tracking-wide mb-4 border border-blue-500/20 uppercase tracking-widest">
             Shibil S
@@ -31,30 +32,20 @@ export default function Hero() {
           <h2 className="text-xl md:text-2xl font-medium text-muted-foreground mb-6 font-mono">
             Best Digital Marketing Strategist in Kerala
           </h2>
+
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-foreground">
+            I Help Businesses Turn Ads <br className="hidden md:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-500">
+              Into Predictable Revenue
+            </span>
+          </h1>
+
+          <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
+            Results-driven Digital Marketing Executive specializing in SEO, SEM, and SMM. I create
+            data-driven campaigns that improve online visibility, generate qualified leads, and
+            increase ROI.
+          </p>
         </motion.div>
-
-        <motion.h1
-          className="text-5xl md:text-7xl font-extrabold tracking-tight mb-6 text-foreground"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-        >
-          I Help Businesses Turn Ads <br className="hidden md:block" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-500">
-            Into Predictable Revenue
-          </span>
-        </motion.h1>
-
-        <motion.p
-          className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          Results-driven Digital Marketing Executive specializing in SEO, SEM, and SMM. I create
-          data-driven campaigns that improve online visibility, generate qualified leads, and
-          increase ROI.
-        </motion.p>
 
         <motion.div
           className="flex flex-col md:flex-row items-center justify-center gap-4"
@@ -64,7 +55,7 @@ export default function Hero() {
         >
           <a
             href="tel:+918590658417"
-            className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-all shadow-lg dark:shadow-[0_0_30px_rgba(255,255,255,0.1)]"
+            className="w-full md:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-lg hover:opacity-90 transition-all shadow-lg dark:shadow-[0_0_30px_rgba(255,255,255,0.1)] transform-gpu"
           >
             Direct Call
             <Phone className="w-5 h-5" />
