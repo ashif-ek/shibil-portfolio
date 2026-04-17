@@ -11,7 +11,11 @@ export default function Footer() {
           {/* Column 1: Brand & About */}
           <div className="space-y-6">
             <div>
-              <Link href="/" className="text-2xl font-bold tracking-tighter text-foreground">
+              <Link 
+                href="/" 
+                className="text-2xl font-bold tracking-tighter text-foreground"
+                aria-label="Return to Shibil S Portfolio Homepage"
+              >
                 Shibil <span className="text-blue-500">S</span>
               </Link>
               <p className="mt-4 text-muted-foreground text-sm leading-relaxed">

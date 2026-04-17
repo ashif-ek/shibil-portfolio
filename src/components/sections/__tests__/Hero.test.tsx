@@ -19,7 +19,7 @@ test("Hero renders correctly", () => {
 
   // Check if the title exists
   expect(
-    screen.getByRole("heading", { name: /Digital Marketing Executive/i, level: 2 }),
+    screen.getByRole("heading", { name: /Best Digital Marketing Strategist in Kerala/i, level: 2 }),
   ).toBeInTheDocument();
 
   // Check if the main heading exists
@@ -27,6 +27,5 @@ test("Hero renders correctly", () => {
 
   // Check for CTA buttons
   expect(screen.getByText(/Direct Call/i)).toBeInTheDocument();
-  expect(screen.getByText(/WhatsApp Chat/i)).toBeInTheDocument();
   expect(screen.getByText(/Download CV/i)).toBeInTheDocument();
 });

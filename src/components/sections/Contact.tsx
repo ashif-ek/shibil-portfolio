@@ -106,17 +106,18 @@ export default function Contact() {
               transition={{ duration: 0.5 }}
             >
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 bg-gradient-to-r from-foreground via-foreground/80 to-foreground/50 bg-clip-text text-transparent">
-                Let's build predictable revenue.
+                Let&apos;s build predictable revenue.
               </h2>
               <p className="text-muted-foreground text-lg mb-12 max-w-md leading-relaxed">
                 Whether you need to scale your ad spend profitably or build a robust SEO foundation,
-                I'm ready to help. Reach out to schedule a strategy call.
+                I&apos;m ready to help. Reach out to schedule a strategy call.
               </p>
 
               <div className="space-y-6">
                 <a
                   href="mailto:sshibil14954@gmail.com"
                   className="flex items-center gap-4 text-muted-foreground hover:text-foreground transition-colors group"
+                  aria-label="Send an email to Shibil S"
                 >
                   <div className="w-12 h-12 bg-muted border border-border rounded-xl flex items-center justify-center group-hover:border-blue-500/50 transition-colors shadow-sm">
                     <Mail className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -134,6 +135,7 @@ export default function Contact() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-4 text-muted-foreground hover:text-foreground transition-colors group"
+                  aria-label="Connect with Shibil S on LinkedIn"
                 >
                   <div className="w-12 h-12 bg-muted border border-border rounded-xl flex items-center justify-center group-hover:border-blue-500/50 transition-colors shadow-sm">
                     <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -151,6 +153,7 @@ export default function Contact() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-4 text-muted-foreground hover:text-foreground transition-colors group"
+                  aria-label="Message Shibil S on WhatsApp"
                 >
                   <div className="w-12 h-12 bg-muted border border-border rounded-xl flex items-center justify-center group-hover:border-blue-500/50 transition-colors shadow-sm">
                     <MessageCircle className="w-5 h-5 text-[#25D366]" />

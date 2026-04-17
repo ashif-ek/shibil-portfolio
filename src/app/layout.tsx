@@ -3,16 +3,13 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import WhatsAppButton from "@/components/common/WhatsAppButton";
-import BackToTop from "@/components/common/BackToTop";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import JsonLd from "@/components/seo/JsonLd";
 import { Person, WithContext } from "schema-dts";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 
 const baseUrl =
-  process.env.NODE_ENV === "production" ? "https://shibill.in" : "http://localhost:3000";
+  process.env.NODE_ENV === "production" ? "https://www.shibil.xyz" : "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -77,6 +74,7 @@ const personSchema: WithContext<Person> = {
 };
 
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { FramerLazyProvider } from "@/components/providers/FramerLazyProvider";
 
 export default function RootLayout({
   children,
@@ -86,6 +84,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://www.shibil.xyz" />
         <JsonLd schema={personSchema} />
       </head>
       <body className={`${inter.variable} font-sans antialiased`}>
@@ -95,12 +94,11 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          <Navbar />
-          {children}
-          <WhatsAppButton />
-          <BackToTop />
-          <Footer />
-          <GoogleAnalytics gaId="G-XXXXXXX" />
+          <FramerLazyProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </FramerLazyProvider>
         </ThemeProvider>
       </body>
     </html>

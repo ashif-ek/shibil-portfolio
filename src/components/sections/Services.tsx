@@ -64,7 +64,7 @@ export default function Services({ data }: { data: Service[] }) {
           <div className="max-w-2xl">
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 text-foreground">How I Drive Growth</h2>
             <p className="text-muted-foreground text-lg">
-              I don't just run ads; I build performance marketing systems designed to generate
+              I don&apos;t just run ads; I build performance marketing systems designed to generate
               measurable revenue.
             </p>
           </div>
@@ -118,6 +118,7 @@ export default function Services({ data }: { data: Service[] }) {
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="block h-full"
+                  aria-label={`Learn more about our ${service.title} service`}
                 >
                   {CardContent}
                 </a>
