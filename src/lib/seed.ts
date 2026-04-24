@@ -115,6 +115,9 @@ export async function seed() {
       category: "Paid Ads",
       excerpt: "A deep dive into modern Meta Ads strategies, focusing on creative testing and account consolidation.",
       content: "Full content coming soon...",
+      author: "Shibil S",
+      readingTime: "5 min read",
+      imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop",
     },
   ]);
 

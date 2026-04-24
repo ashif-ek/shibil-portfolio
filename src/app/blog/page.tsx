@@ -1,4 +1,6 @@
-import { getAllPosts } from "@/lib/mdx";
+import { db } from "@/lib/db";
+import { blogPosts } from "@/lib/schema";
+import { desc } from "drizzle-orm";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -7,13 +9,13 @@ export const metadata: Metadata = {
   description: "Read the latest thoughts on SEO, Meta Ads, and Growth Strategies.",
 };
 
-export default function BlogIndex() {
-  const posts = getAllPosts();
+export default async function BlogIndex() {
+  const posts = await db.select().from(blogPosts).orderBy(desc(blogPosts.publishedAt));
 
   return (
     <main className="min-h-screen bg-black pt-32 pb-24">
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-8">
+        <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-8 text-white">
           Growth <span className="text-blue-500">Insights</span>
         </h1>
         <p className="text-gray-400 text-lg mb-16">
@@ -35,17 +37,23 @@ export default function BlogIndex() {
                     {post.category}
                   </span>
                   <span className="text-zinc-500 text-sm">
-                    {new Date(post.date).toLocaleDateString("en-US", {
+                    {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString("en-US", {
                       month: "long",
                       day: "numeric",
                       year: "numeric",
-                    })}
+                    }) : post.date}
                   </span>
+                  {post.readingTime && (
+                    <>
+                      <span className="text-zinc-700">•</span>
+                      <span className="text-zinc-500 text-sm">{post.readingTime}</span>
+                    </>
+                  )}
                 </div>
                 <h2 className="text-2xl font-bold text-white mb-3 group-hover:text-blue-400 transition-colors">
                   {post.title}
                 </h2>
-                <p className="text-gray-400">{post.description}</p>
+                <p className="text-gray-400 leading-relaxed">{post.excerpt || post.content?.substring(0, 160) + "..."}</p>
               </Link>
             ))}
           </div>

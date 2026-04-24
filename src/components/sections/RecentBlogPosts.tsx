@@ -47,26 +47,43 @@ export default function RecentBlogPosts({ data }: { data: BlogPostData[] }) {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
               className="group p-8 rounded-3xl bg-card border border-border hover:border-blue-500/50 transition-all relative flex flex-col shadow-sm"
             >
-              <div className="mb-6 flex items-center gap-3">
-                <span className="p-2 bg-blue-500/10 rounded-lg">
-                  <BookOpen className="w-4 h-4 text-blue-600 dark:text-blue-500" />
-                </span>
-                <span className="text-xs font-mono text-blue-600 dark:text-blue-400 uppercase tracking-widest">
-                  {post.category}
-                </span>
+              <div className="mb-6 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className="p-2 bg-blue-500/10 rounded-lg">
+                    <BookOpen className="w-4 h-4 text-blue-600 dark:text-blue-500" />
+                  </span>
+                  <span className="text-xs font-mono text-blue-600 dark:text-blue-400 uppercase tracking-widest">
+                    {post.category}
+                  </span>
+                </div>
+                {(post as any).readingTime && (
+                  <span className="text-[10px] font-medium text-muted-foreground/60 uppercase tracking-tighter">
+                    {(post as any).readingTime}
+                  </span>
+                )}
               </div>
 
-              <h3 className="text-xl font-bold text-foreground mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+              <h3 className="text-xl font-bold text-foreground mb-4 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 line-clamp-2">
                 <Link href={`/blog/${post.slug}`}>{post.title}</Link>
               </h3>
 
-              <p className="text-muted-foreground text-sm mb-8 leading-relaxed">{post.excerpt}</p>
+              <p className="text-muted-foreground text-sm mb-8 leading-relaxed line-clamp-3">
+                {post.excerpt || (post as any).content?.substring(0, 120) + "..."}
+              </p>
 
               <div className="mt-auto pt-6 border-t border-border flex items-center justify-between">
-                <span className="text-xs text-muted-foreground/60 font-medium">{post.date}</span>
+                <span className="text-xs text-muted-foreground/60 font-medium">
+                  {(post as any).publishedAt 
+                    ? new Date((post as any).publishedAt).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })
+                    : post.date}
+                </span>
                 <Link
                   href={`/blog/${post.slug}`}
                   className="text-foreground text-sm font-bold flex items-center gap-1 group/btn"

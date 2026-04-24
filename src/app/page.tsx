@@ -45,7 +45,7 @@ async function ExperienceSection() {
 }
 
 async function BlogSection() {
-  const data = await db.select().from(blogPosts).orderBy(desc(blogPosts.createdAt)).limit(3);
+  const data = await db.select().from(blogPosts).orderBy(desc(blogPosts.publishedAt)).limit(3);
   return <RecentBlogPosts data={data} />;
 }
 

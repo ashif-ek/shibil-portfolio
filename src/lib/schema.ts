@@ -38,11 +38,16 @@ export const blogPosts = pgTable("blog_posts", {
   id: text("id").primaryKey(),
   title: text("title").notNull(),
   slug: text("slug").notNull().unique(),
-  date: text("date"),
+  date: text("date"), // Keeping for backward compatibility
+  publishedAt: timestamp("published_at").defaultNow(),
   category: text("category"),
   excerpt: text("excerpt"),
   content: text("content"),
+  author: text("author").default("Shibil S"),
+  readingTime: text("reading_time"),
+  imageUrl: text("image_url"),
   createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const certificates = pgTable("certificates", {

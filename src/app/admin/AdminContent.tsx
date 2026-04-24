@@ -440,17 +440,35 @@ function BlogForm({ item, onSubmit, isPending }: { item: any; onSubmit: (fd: For
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Slug</label>
-          <input name="slug" defaultValue={item?.slug} required className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="url-slug" />
+          <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Slug (Optional)</label>
+          <input name="slug" defaultValue={item?.slug} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="auto-generated if empty" />
         </div>
         <div className="space-y-1.5">
           <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Category</label>
           <input name="category" defaultValue={item?.category} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="Growth" />
         </div>
       </div>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-1.5">
+          <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Author</label>
+          <input name="author" defaultValue={item?.author || "Shibil S"} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" />
+        </div>
+        <div className="space-y-1.5">
+          <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Reading Time</label>
+          <input name="readingTime" defaultValue={item?.readingTime} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="5 min read" />
+        </div>
+      </div>
+      <div className="space-y-1.5">
+        <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Cover Image URL</label>
+        <input name="imageUrl" defaultValue={item?.imageUrl} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300" placeholder="https://..." />
+      </div>
+      <div className="space-y-1.5">
+        <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Short Excerpt</label>
+        <textarea name="excerpt" defaultValue={item?.excerpt} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300 min-h-[60px]" placeholder="Brief summary for list view..." />
+      </div>
       <div className="space-y-1.5">
         <label className="text-[11px] font-bold uppercase tracking-tight text-zinc-500">Markdown Content</label>
-        <textarea name="content" defaultValue={item?.content} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300 min-h-[120px]" placeholder="Write content..." />
+        <textarea name="content" defaultValue={item?.content} className="w-full bg-white border border-zinc-300 rounded-md px-3 py-2 text-sm text-black focus:border-[#0073BB] focus:ring-1 focus:ring-[#0073BB] outline-none transition-all placeholder:text-zinc-300 min-h-[200px]" placeholder="Write content..." />
       </div>
       <button disabled={isPending} className="w-full bg-[#0073BB] text-white font-bold py-2.5 rounded-md hover:bg-[#005c96] transition-all shadow-sm active:translate-y-[1px] disabled:opacity-50">
         {isPending ? "Processing..." : item ? "Update Post" : "Deploy Article"}

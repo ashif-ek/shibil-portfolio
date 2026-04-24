@@ -8,7 +8,7 @@ const BackToTop = dynamic(() => import("@/components/common/BackToTop"), { ssr: 
 
 export function FramerLazyProvider({ children }: { children: React.ReactNode }) {
   return (
-    <LazyMotion features={domAnimation} strict>
+    <LazyMotion features={domAnimation} strict={false}>
       {children}
       <WhatsAppButton />
       <BackToTop />

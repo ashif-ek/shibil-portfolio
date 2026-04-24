@@ -8,22 +8,34 @@ import { eq } from "drizzle-orm";
 
 const schema = z.object({
   title: z.string().min(1, "Title is required"),
-  slug: z.string().min(1, "Slug is required"),
-  date: z.string().nullable().optional(),
+  slug: z.string().optional(),
   category: z.string().nullable().optional(),
   excerpt: z.string().nullable().optional(),
   content: z.string().nullable().optional(),
+  author: z.string().nullable().optional(),
+  readingTime: z.string().nullable().optional(),
+  imageUrl: z.string().nullable().optional(),
 });
+
+function generateSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
 
 export async function createBlogPost(formData: FormData) {
   try {
     const rawData = {
       title: formData.get("title") as string,
       slug: formData.get("slug") as string,
-      date: formData.get("date") as string,
       category: formData.get("category") as string,
       excerpt: formData.get("excerpt") as string,
       content: formData.get("content") as string,
+      author: formData.get("author") as string,
+      readingTime: formData.get("readingTime") as string,
+      imageUrl: formData.get("imageUrl") as string,
     };
 
     const parsed = schema.safeParse(rawData);
@@ -32,14 +44,19 @@ export async function createBlogPost(formData: FormData) {
       return { success: false, error: parsed.error.issues[0].message };
     }
 
+    const slug = parsed.data.slug || generateSlug(parsed.data.title);
+
     await db.insert(blogPosts).values({
       id: crypto.randomUUID(),
       title: parsed.data.title,
-      slug: parsed.data.slug,
-      date: parsed.data.date || null,
+      slug: slug,
       category: parsed.data.category || null,
       excerpt: parsed.data.excerpt || null,
       content: parsed.data.content || null,
+      author: parsed.data.author || "Shibil S",
+      readingTime: parsed.data.readingTime || null,
+      imageUrl: parsed.data.imageUrl || null,
+      publishedAt: new Date(),
     });
 
     revalidatePath("/admin");
@@ -70,10 +87,12 @@ export async function updateBlogPost(id: string, formData: FormData) {
     const rawData = {
       title: formData.get("title") as string,
       slug: formData.get("slug") as string,
-      date: formData.get("date") as string,
       category: formData.get("category") as string,
       excerpt: formData.get("excerpt") as string,
       content: formData.get("content") as string,
+      author: formData.get("author") as string,
+      readingTime: formData.get("readingTime") as string,
+      imageUrl: formData.get("imageUrl") as string,
     };
 
     const parsed = schema.safeParse(rawData);
@@ -82,15 +101,20 @@ export async function updateBlogPost(id: string, formData: FormData) {
       return { success: false, error: parsed.error.issues[0].message };
     }
 
+    const slug = parsed.data.slug || generateSlug(parsed.data.title);
+
     await db
       .update(blogPosts)
       .set({
         title: parsed.data.title,
-        slug: parsed.data.slug,
-        date: parsed.data.date || null,
+        slug: slug,
         category: parsed.data.category || null,
         excerpt: parsed.data.excerpt || null,
         content: parsed.data.content || null,
+        author: parsed.data.author || "Shibil S",
+        readingTime: parsed.data.readingTime || null,
+        imageUrl: parsed.data.imageUrl || null,
+        updatedAt: new Date(),
       })
       .where(eq(blogPosts.id, id));
 
